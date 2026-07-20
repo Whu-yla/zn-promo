@@ -114,32 +114,10 @@
     .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-bright); }
 .hero .highlight-brand {
       background: linear-gradient(135deg, #00f5ff, #7b2fff, #ff00ff);
-      background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       font-weight: 800;
-      text-shadow: 0 0 20px rgba(0, 245, 255, 0.6), 0 0 40px rgba(123, 47, 255, 0.4), 0 0 60px rgba(255, 0, 255, 0.2);
-      animation: brandGlow 3s ease-in-out infinite;
-      position: relative;
-    }
-    .hero .highlight-brand::before {
-      content: attr(data-text);
-      position: absolute;
-      top: 0; left: 0;
-      z-index: -1;
-      background: linear-gradient(135deg, #00f5ff, #7b2fff, #ff00ff);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: blur(8px);
-      opacity: 0.7;
-      animation: brandGlow 3s ease-in-out infinite;
-    }
-    @keyframes brandGlow {
-      0%, 100% { background-position: 0% 50%; text-shadow: 0 0 20px rgba(0, 245, 255, 0.6), 0 0 40px rgba(123, 47, 255, 0.4), 0 0 60px rgba(255, 0, 255, 0.2); }
-      50% { background-position: 100% 50%; text-shadow: 0 0 30px rgba(0, 245, 255, 0.8), 0 0 60px rgba(123, 47, 255, 0.6), 0 0 90px rgba(255, 0, 255, 0.4); }
     }
 .hero h1 {
       font-size: 30px; line-height: 1.25; font-weight: 800;
