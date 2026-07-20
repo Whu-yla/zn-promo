@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>合作登记管理后台 | 中南电力数智科技</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .login-page {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; background: linear-gradient(135deg, #0a1f3d, #1e3a5f);
+    }
+    .login-box {
+      background: #fff; border-radius: 20px; padding: 48px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 420px;
+    }
+    .login-box .logo { text-align: center; margin-bottom: 32px; }
+    .login-box .logo img { height: 48px; margin-bottom: 12px; }
+    .login-box .logo h1 { font-size: 20px; color: #1e3a5f; font-weight: 700; }
+    .login-box .form-group { margin-bottom: 20px; }
+    .login-box .form-group label { display: block; font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 8px; }
+    .login-box .form-group input {
+      width: 100%; padding: 14px 16px; border: 1px solid #e2e8f0;
+      border-radius: 10px; font-size: 15px; font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .login-box .form-group input:focus {
+      outline: none; border-color: #1e5bb8; box-shadow: 0 0 0 3px rgba(30,91,184,0.1);
+    }
+    .login-box .btn-login {
+      width: 100%; padding: 14px; background: #1e5bb8; color: #fff;
+      border: none; border-radius: 10px; font-size: 16px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s; margin-top: 8px;
+    }
+    .login-box .btn-login:hover { background: #2563eb; }
+    .login-box .btn-login:disabled { background: #94a3b8; cursor: not-allowed; }
+    .login-box .error { color: #dc2626; font-size: 13px; margin-top: 12px; text-align: center; }
+
+    .header {
+      background: linear-gradient(135deg, #0a1f3d, #102a4c);
+      color: #fff; padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .header .logo {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 8px;
+    }
+    .header .logo img { height: 28px; }
+    .header .logo span { font-size: 14px; font-weight: 600; }
+    .header .user-info { display: flex; align-items: center; gap: 16px; }
+    .header .user-info span { font-size: 14px; opacity: 0.9; }
+    .header .btn-logout {
+      padding: 6px 16px; background: rgba(255,255,255,0.15);
+      color: #fff; border: none; border-radius: 6px; font-size: 13px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .header .btn-logout:hover { background: rgba(255,255,255,0.25); }
+
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px; margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #fff; border-radius: 12px; padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .stat-card .icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .stat-card .icon.total { background: #dbeafe; color: #1d4ed8; }
+    .stat-card .icon.pending { background: #fef3c7; color: #d97706; }
+    .stat-card .icon.contacted { background: #dcfce7; color: #16a34a; }
+    .stat-card .icon.cooperated { background: #c4b5fd; color: #6d28d9; }
+    .stat-card .info .num { font-size: 24px; font-weight: 800; color: #1e293b; }
+    .stat-card .info .label { font-size: 13px; color: #64748b; }
+
+    .search-bar {
+      background: #fff; border-radius: 12px; padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+      margin-bottom: 16px;
+    }
+    .search-bar input, .search-bar select, .search-bar button, .search-bar .date-input {
+      padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px;
+      font-size: 14px; font-family: inherit;
+    }
+    .search-bar input { flex: 1; min-width: 180px; max-width: 280px; }
+    .search-bar select { min-width: 140px; }
+    .search-bar .date-input { min-width: 120px; }
+    .search-bar .btn-group { display: flex; gap: 8px; }
+    .search-bar .btn-group button {
+      padding: 10px 18px; background: #1e5bb8; color: #fff;
+      border: none; border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .search-bar .btn-group button:hover { background: #2563eb; }
+    .search-bar .btn-group .btn-export { background: #10b981; }
+    .search-bar .btn-group .btn-export:hover { background: #059669; }
+    .search-bar .btn-group .btn-logs { background: #6366f1; }
+    .search-bar .btn-group .btn-logs:hover { background: #4f46e5; }
+    .search-bar .btn-group .btn-batch-action { background: #f59e0b; }
+    .search-bar .btn-group .btn-batch-action:hover { background: #d97706; }
+
+    .table-wrap {
+      background: #fff; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th {
+      background: #f8fafc; font-weight: 700; font-size: 12px; color: #64748b;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    td { font-size: 13px; color: #334155; }
+    tr:hover { background: #f8fafc; }
+    .checkbox-cell { padding: 0; text-align: center; }
+    .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
+
+    .tag {
+      display: inline-block; padding: 3px 10px; border-radius: 4px;
+      font-size: 12px; font-weight: 600;
+    }
+    .tag.pending { background: #fef3c7; color: #d97706; }
+    .tag.contacted { background: #dcfce7; color: #16a34a; }
+    .tag.cooperated { background: #c4b5fd; color: #6d28d9; }
+    .tag.rejected { background: #fee2e2; color: #dc2626; }
+    .tag.core { background: #dbeafe; color: #1d4ed8; }
+    .tag.powerplant { background: #fef3c7; color: #d97706; }
+    .tag.grid { background: #dcfce7; color: #16a34a; }
+    .tag.newenergy { background: #fce7f3; color: #be185d; }
+    .tag.others { background: #ede9fe; color: #6d28d9; }
+    .tag.hardware { background: #fed7aa; color: #ea580c; }
+    .tag.software { background: #bfdbfe; color: #2563eb; }
+    .tag.custom { background: #f3f4f6; color: #374151; }
+
+    .actions { display: flex; gap: 6px; }
+    .btn-view {
+      padding: 5px 10px; background: #1e5bb8; color: #fff;
+      border: none; border-radius: 5px; font-size: 11px; cursor: pointer;
+    }
+    .btn-edit {
+      padding: 5px 10px; background: #f59e0b; color: #fff;
+      border: none; border-radius: 5px; font-size: 11px; cursor: pointer;
+    }
+    .btn-delete {
+      padding: 5px 10px; background: #dc2626; color: #fff;
+      border: none; border-radius: 5px; font-size: 11px; cursor: pointer;
+    }
+    .btn-view:hover { background: #2563eb; }
+    .btn-edit:hover { background: #d97706; }
+    .btn-delete:hover { background: #ef4444; }
+
+    .status-select {
+      padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 4px;
+      font-size: 11px; cursor: pointer; background: #fff;
+    }
+    .status-select:hover { border-color: #1e5bb8; }
+
+    .pagination {
+      display: flex; justify-content: center; align-items: center;
+      gap: 6px; padding: 16px; flex-wrap: wrap;
+    }
+    .pagination button {
+      padding: 6px 14px; border: 1px solid #e2e8f0;
+      background: #fff; border-radius: 6px; font-size: 13px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .pagination button:hover { background: #f1f5f9; }
+    .pagination button.active {
+      background: #1e5bb8; color: #fff; border-color: #1e5bb8;
+    }
+    .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 100;
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: #fff; border-radius: 16px; padding: 24px;
+      max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-content h3 { font-size: 18px; margin-bottom: 20px; }
+    .modal-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .modal-row .label { min-width: 80px; font-weight: 600; color: #64748b; }
+    .modal-row .value { flex: 1; word-break: break-all; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+    .modal-actions button {
+      padding: 10px 20px; border-radius: 8px; font-size: 14px; cursor: pointer;
+    }
+    .btn-cancel { background: #f1f5f9; border: none; color: #64748b; }
+    .btn-confirm { background: #dc2626; border: none; color: #fff; }
+    .btn-primary { background: #1e5bb8; border: none; color: #fff; }
+
+    .batch-modal .modal-content { max-width: 400px; }
+    .batch-modal .form-group { margin-bottom: 16px; }
+    .batch-modal .form-group label { display: block; font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 8px; }
+    .batch-modal .form-group select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+
+    .empty { text-align: center; padding: 60px 20px; color: #94a3b8; }
+    .empty .icon { font-size: 48px; margin-bottom: 16px; }
+    .empty p { font-size: 14px; }
+
+    .logs-panel { display: none; }
+    .logs-panel.active { display: block; }
+    .logs-panel .log-table { margin-top: 16px; }
+    .logs-panel .log-table th, .logs-panel .log-table td { padding: 10px 12px; font-size: 12px; }
+
+    .loading-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(255,255,255,0.8); z-index: 200;
+      align-items: center; justify-content: center;
+    }
+    .loading-overlay.active { display: flex; }
+    .loading-spinner {
+      width: 40px; height: 40px; border: 4px solid #e2e8f0;
+      border-top-color: #1e5bb8; border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast {
+      position: fixed; top: 20px; right: 20px; z-index: 300;
+      padding: 12px 20px; border-radius: 8px; font-size: 14px;
+      color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      animation: slideIn 0.3s ease;
+    }
+    .toast.success { background: #10b981; }
+    .toast.error { background: #dc2626; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    @media (max-width: 768px) {
+      .header { padding: 12px 16px; }
+      .header .logo span { display: none; }
+      .container { padding: 12px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .search-bar { flex-direction: column; align-items: stretch; }
+      .search-bar input { max-width: 100%; }
+      .search-bar .btn-group { justify-content: stretch; }
+      .search-bar .btn-group button { flex: 1; }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 600px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div class="login-page" id="loginPage">
+    <div class="login-box">
+      <div class="logo">
+        <img src="./assets/logo_vertical_clean.png" alt="中南数智">
+        <h1>合作登记管理系统</h1>
+      </div>
+      <div class="form-group">
+        <label>用户名</label>
+        <input type="text" id="username" placeholder="请输入用户名" value="admin">
+      </div>
+      <div class="form-group">
+        <label>密码</label>
+        <input type="password" id="password" placeholder="请输入密码" value="admin123">
+      </div>
+      <button class="btn-login" onclick="handleLogin()">登录</button>
+      <div class="error" id="loginError"></div>
+    </div>
+  </div>
+
+  <div id="adminPage" style="display:none;">
+    <div class="header">
+      <div class="logo">
+        <img src="./assets/logo_vertical_clean.png" alt="中南数智">
+        <span>合作登记管理</span>
+      </div>
+      <div class="user-info">
+        <span>管理员</span>
+        <button class="btn-logout" onclick="handleLogout()">退出登录</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="icon total">📊</div>
+          <div class="info"><div class="num" id="statTotal">0</div><div class="label">总登记数</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="icon pending">⏳</div>
+          <div class="info"><div class="num" id="statPending">0</div><div class="label">待处理</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="icon contacted">📞</div>
+          <div class="info"><div class="num" id="statContacted">0</div><div class="label">已联系</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="icon cooperated">🤝</div>
+          <div class="info"><div class="num" id="statCooperated">0</div><div class="label">已合作</div></div>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="搜索姓名、公司、电话...">
+        <select id="interestFilter">
+          <option value="">全部方向</option>
+          <option value="core">核心支撑平台</option>
+          <option value="powerplant">电厂数字解决方案</option>
+          <option value="grid">电网数字解决方案</option>
+          <option value="newenergy">新能源数字解决方案</option>
+          <option value="others">其他数字化解决方案</option>
+          <option value="hardware">玄武系列硬件装备</option>
+          <option value="software">文鳐系列软件产品</option>
+          <option value="custom">定制化项目合作</option>
+        </select>
+        <select id="statusFilter">
+          <option value="">全部状态</option>
+          <option value="pending">待处理</option>
+          <option value="contacted">已联系</option>
+          <option value="cooperated">已合作</option>
+          <option value="rejected">暂不考虑</option>
+        </select>
+        <input type="date" class="date-input" id="startDate">
+        <input type="date" class="date-input" id="endDate">
+        <div class="btn-group">
+          <button onclick="loadRecords()">搜索</button>
+          <button class="btn-export" onclick="exportData()">导出CSV</button>
+          <button class="btn-logs" onclick="toggleLogs()">操作日志</button>
+          <button class="btn-batch-action" onclick="showBatchModal()">批量操作</button>
+        </div>
+      </div>
+
+      <div class="table-wrap" id="recordsPanel">
+        <table>
+          <thead>
+            <tr>
+              <th class="checkbox-cell"><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+              <th>ID</th>
+              <th>姓名</th>
+              <th>单位</th>
+              <th>电话</th>
+              <th>邮箱</th>
+              <th>感兴趣方向</th>
+              <th>状态</th>
+              <th>提交时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="recordList"></tbody>
+        </table>
+        <div class="pagination" id="pagination"></div>
+      </div>
+
+      <div class="logs-panel" id="logsPanel">
+        <h3 style="margin-bottom: 16px; color: #1e293b;">操作日志</h3>
+        <div class="table-wrap log-table">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>操作</th>
+                <th>目标</th>
+                <th>操作者</th>
+                <th>时间</th>
+              </tr>
+            </thead>
+            <tbody id="logList"></tbody>
+          </table>
+          <div class="pagination" id="logsPagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="viewModal">
+      <div class="modal-content">
+        <h3>登记详情</h3>
+        <div class="modal-row"><span class="label">ID：</span><span class="value" id="viewId"></span></div>
+        <div class="modal-row"><span class="label">姓名：</span><span class="value" id="viewName"></span></div>
+        <div class="modal-row"><span class="label">单位：</span><span class="value" id="viewCompany"></span></div>
+        <div class="modal-row"><span class="label">电话：</span><span class="value" id="viewPhone"></span></div>
+        <div class="modal-row"><span class="label">邮箱：</span><span class="value" id="viewEmail"></span></div>
+        <div class="modal-row"><span class="label">方向：</span><span class="value" id="viewInterest"></span></div>
+        <div class="modal-row"><span class="label">说明：</span><span class="value" id="viewMessage"></span></div>
+        <div class="modal-row"><span class="label">状态：</span><span class="value" id="viewStatus"></span></div>
+        <div class="modal-row"><span class="label">创建：</span><span class="value" id="viewCreated"></span></div>
+        <div class="modal-row"><span class="label">更新：</span><span class="value" id="viewUpdated"></span></div>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal()">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="deleteModal">
+      <div class="modal-content">
+        <h3>确认删除</h3>
+        <p>确定要删除这条登记记录吗？此操作不可恢复。</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeDeleteModal()">取消</button>
+          <button class="btn-confirm" onclick="confirmDelete()">确认删除</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal batch-modal" id="batchModal">
+      <div class="modal-content">
+        <h3>批量操作</h3>
+        <div class="form-group">
+          <label>选择操作</label>
+          <select id="batchAction">
+            <option value="status">批量更新状态</option>
+            <option value="delete">批量删除</option>
+          </select>
+        </div>
+        <div class="form-group" id="batchStatusGroup">
+          <label>目标状态</label>
+          <select id="batchStatus">
+            <option value="pending">待处理</option>
+            <option value="contacted">已联系</option>
+            <option value="cooperated">已合作</option>
+            <option value="rejected">暂不考虑</option>
+          </select>
+        </div>
+        <p style="font-size: 13px; color: #64748b;">已选择 <span id="selectedCount">0</span> 条记录</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeBatchModal()">取消</button>
+          <button class="btn-primary" onclick="executeBatchAction()">执行</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:8000/api';
+    let accessToken = '';
+    let currentPage = 1;
+    let totalPages = 1;
+    let deleteId = null;
+    let logsPage = 1;
+    let logsTotalPages = 1;
+
+    const interestMap = {
+      'core': '核心支撑平台', 'powerplant': '电厂数字解决方案',
+      'grid': '电网数字解决方案', 'newenergy': '新能源数字解决方案',
+      'others': '其他数字化解决方案', 'hardware': '玄武系列硬件装备',
+      'software': '文鳐系列软件产品', 'custom': '定制化项目合作'
+    };
+
+    const statusMap = {
+      'pending': '待处理', 'contacted': '已联系',
+      'cooperated': '已合作', 'rejected': '暂不考虑'
+    };
+
+    async function handleLogin() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const btn = document.querySelector('.btn-login');
+      const error = document.getElementById('loginError');
+
+      btn.disabled = true;
+      error.textContent = '';
+
+      try {
+        const response = await fetch('http://localhost:8000/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          accessToken = data.access_token;
+          localStorage.setItem('access_token', accessToken);
+          document.getElementById('loginPage').style.display = 'none';
+          document.getElementById('adminPage').style.display = 'block';
+          loadRecords();
+          loadStatistics();
+        } else {
+          const err = await response.json();
+          error.textContent = err.detail || '登录失败';
+        }
+      } catch (e) {
+        error.textContent = '网络错误，请检查后端服务是否运行';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function handleLogout() {
+      accessToken = '';
+      localStorage.removeItem('access_token');
+      document.getElementById('adminPage').style.display = 'none';
+      document.getElementById('loginPage').style.display = 'flex';
+    }
+
+    async function fetchWithAuth(url, options = {}) {
+      options.headers = options.headers || {};
+      options.headers['Authorization'] = `Bearer ${accessToken}`;
+      return fetch(url, options);
+    }
+
+    async function loadRecords(page = 1) {
+      showLoading(true);
+      currentPage = page;
+      const search = document.getElementById('searchInput').value;
+      const interest = document.getElementById('interestFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+
+      let url = `${API_BASE}/records?page=${page}`;
+      if (search) url += `&search=${encodeURIComponent(search)}`;
+      if (interest) url += `&interest=${interest}`;
+      if (status) url += `&status=${status}`;
+      if (startDate) url += `&start_date=${startDate}`;
+      if (endDate) url += `&end_date=${endDate}`;
+
+      try {
+        const response = await fetchWithAuth(url);
+        if (!response.ok) throw new Error('获取数据失败');
+        const records = await response.json();
+
+        const countResponse = await fetchWithAuth(`${API_BASE}/count`);
+        const countData = await countResponse.json();
+        totalPages = Math.ceil(countData.count / 20);
+
+        renderTable(records);
+        renderPagination();
+      } catch (error) {
+        console.error('Error loading records:', error);
+        if (error.message.includes('401')) {
+          handleLogout();
+        } else {
+          alert('加载失败，请检查网络或重新登录');
+        }
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function loadStatistics() {
+      try {
+        const response = await fetchWithAuth(`${API_BASE}/statistics`);
+        if (!response.ok) return;
+        const data = await response.json();
+
+        document.getElementById('statTotal').textContent = data.total;
+        document.getElementById('statPending').textContent = data.pending;
+        document.getElementById('statContacted').textContent = data.contacted;
+        document.getElementById('statCooperated').textContent = data.cooperated;
+      } catch (error) {
+        console.error('Error loading statistics:', error);
+      }
+    }
+
+    function renderTable(records) {
+      const tbody = document.getElementById('recordList');
+      if (records.length === 0) {
+        tbody.innerHTML = `
+          <tr><td colspan="10" class="empty">
+            <div class="icon">📋</div>
+            <p>暂无登记记录</p>
+          </td></tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = records.map(record => `
+        <tr>
+          <td class="checkbox-cell"><input type="checkbox" class="rowCheckbox" data-id="${record.id}"></td>
+          <td>${record.id}</td>
+          <td>${record.name}</td>
+          <td>${record.company}</td>
+          <td>${record.phone}</td>
+          <td>${record.email || '-'}</td>
+          <td><span class="tag ${record.interest}">${interestMap[record.interest] || record.interest}</span></td>
+          <td>
+            <select class="status-select" onchange="updateStatus(${record.id}, this.value)">
+              ${Object.entries(statusMap).map(([k, v]) => 
+                `<option value="${k}" ${record.status === k ? 'selected' : ''}>${v}</option>`
+              ).join('')}
+            </select>
+          </td>
+          <td>${record.created_at}</td>
+          <td class="actions">
+            <button class="btn-view" onclick="viewRecord(${record.id})">查看</button>
+            <button class="btn-delete" onclick="showDeleteModal(${record.id})">删除</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderPagination() {
+      const pagination = document.getElementById('pagination');
+      let html = '';
+      html += `<button onclick="loadRecords(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>上一页</button>`;
+      
+      const start = Math.max(1, currentPage - 2);
+      const end = Math.min(totalPages, currentPage + 2);
+      for (let i = start; i <= end; i++) {
+        html += `<button onclick="loadRecords(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+      }
+      
+      html += `<button onclick="loadRecords(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>下一页</button>`;
+      pagination.innerHTML = html;
+    }
+
+    async function updateStatus(id, status) {
+      try {
+        const response = await fetchWithAuth(`${API_BASE}/records/${id}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+        if (response.ok) {
+          showToast('状态更新成功', 'success');
+          loadStatistics();
+        } else {
+          showToast('更新失败', 'error');
+          loadRecords(currentPage);
+        }
+      } catch (error) {
+        console.error('Error updating status:', error);
+        showToast('更新失败', 'error');
+      }
+    }
+
+    async function viewRecord(id) {
+      try {
+        const response = await fetchWithAuth(`${API_BASE}/records/${id}`);
+        if (!response.ok) throw new Error('获取详情失败');
+        const record = await response.json();
+
+        document.getElementById('viewId').textContent = record.id;
+        document.getElementById('viewName').textContent = record.name;
+        document.getElementById('viewCompany').textContent = record.company;
+        document.getElementById('viewPhone').textContent = record.phone;
+        document.getElementById('viewEmail').textContent = record.email || '未填写';
+        document.getElementById('viewInterest').textContent = interestMap[record.interest] || record.interest;
+        document.getElementById('viewMessage').textContent = record.message || '无';
+        document.getElementById('viewStatus').textContent = statusMap[record.status] || record.status;
+        document.getElementById('viewCreated').textContent = record.created_at;
+        document.getElementById('viewUpdated').textContent = record.updated_at;
+        
+        document.getElementById('viewModal').classList.add('active');
+      } catch (error) {
+        console.error('Error viewing record:', error);
+        showToast('查看失败', 'error');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('viewModal').classList.remove('active');
+    }
+
+    function showDeleteModal(id) {
+      deleteId = id;
+      document.getElementById('deleteModal').classList.add('active');
+    }
+
+    function closeDeleteModal() {
+      deleteId = null;
+      document.getElementById('deleteModal').classList.remove('active');
+    }
+
+    async function confirmDelete() {
+      if (!deleteId) return;
+      showLoading(true);
+      try {
+        const response = await fetchWithAuth(`${API_BASE}/records/${deleteId}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          closeDeleteModal();
+          showToast('删除成功', 'success');
+          loadRecords(currentPage);
+          loadStatistics();
+        } else {
+          showToast('删除失败', 'error');
+        }
+      } catch (error) {
+        console.error('Error deleting record:', error);
+        showToast('删除失败', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function toggleSelectAll() {
+      const checkboxes = document.querySelectorAll('.rowCheckbox');
+      const selectAll = document.getElementById('selectAll');
+      checkboxes.forEach(cb => cb.checked = selectAll.checked);
+      updateSelectedCount();
+    }
+
+    function updateSelectedCount() {
+      const checked = document.querySelectorAll('.rowCheckbox:checked');
+      document.getElementById('selectedCount').textContent = checked.length;
+    }
+
+    document.addEventListener('change', function(e) {
+      if (e.target.classList.contains('rowCheckbox')) {
+        updateSelectedCount();
+      }
+    });
+
+    function showBatchModal() {
+      const checked = document.querySelectorAll('.rowCheckbox:checked');
+      if (checked.length === 0) {
+        showToast('请先选择要操作的记录', 'error');
+        return;
+      }
+      updateSelectedCount();
+      document.getElementById('batchModal').classList.add('active');
+    }
+
+    function closeBatchModal() {
+      document.getElementById('batchModal').classList.remove('active');
+    }
+
+    async function executeBatchAction() {
+      const action = document.getElementById('batchAction').value;
+      const checked = document.querySelectorAll('.rowCheckbox:checked');
+      const ids = Array.from(checked).map(cb => parseInt(cb.dataset.id));
+
+      if (ids.length === 0) {
+        showToast('请选择记录', 'error');
+        return;
+      }
+
+      showLoading(true);
+      try {
+        if (action === 'delete') {
+          const response = await fetchWithAuth(`${API_BASE}/records/batch`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(ids)
+          });
+          if (response.ok) {
+            showToast('批量删除成功', 'success');
+          }
+        } else {
+          const status = document.getElementById('batchStatus').value;
+          const response = await fetchWithAuth(`${API_BASE}/records/batch/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ record_ids: ids, status })
+          });
+          if (response.ok) {
+            showToast('批量更新成功', 'success');
+          }
+        }
+        closeBatchModal();
+        loadRecords(currentPage);
+        loadStatistics();
+      } catch (error) {
+        console.error('Batch action error:', error);
+        showToast('操作失败', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function exportData() {
+      const search = document.getElementById('searchInput').value;
+      const interest = document.getElementById('interestFilter').value;
+      const status = document.getElementById('statusFilter').value;
+
+      let url = `${API_BASE}/export`;
+      if (search) url += `&search=${encodeURIComponent(search)}`;
+      if (interest) url += `&interest=${interest}`;
+      if (status) url += `&status=${status}`;
+
+      try {
+        const response = await fetchWithAuth(url);
+        if (!response.ok) throw new Error('导出失败');
+        
+        const blob = await response.blob();
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = 'cooperation_records.csv';
+        if (contentDisposition) {
+          const match = contentDisposition.match(/filename=(.+)/);
+          if (match) filename = match[1];
+        }
+
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(downloadUrl);
+        
+        showToast('导出成功', 'success');
+      } catch (error) {
+        console.error('Error exporting data:', error);
+        showToast('导出失败', 'error');
+      }
+    }
+
+    function toggleLogs() {
+      const recordsPanel = document.getElementById('recordsPanel');
+      const logsPanel = document.getElementById('logsPanel');
+      
+      if (logsPanel.classList.contains('active')) {
+        logsPanel.classList.remove('active');
+        recordsPanel.style.display = 'block';
+      } else {
+        logsPanel.classList.add('active');
+        recordsPanel.style.display = 'none';
+        loadLogs();
+      }
+    }
+
+    async function loadLogs(page = 1) {
+      logsPage = page;
+      try {
+        const response = await fetchWithAuth(`${API_BASE}/logs?page=${page}&page_size=20`);
+        if (!response.ok) throw new Error('获取日志失败');
+        const logs = await response.json();
+
+        const tbody = document.getElementById('logList');
+        if (logs.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="empty"><p>暂无操作日志</p></td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = logs.map(log => `
+          <tr>
+            <td>${log.id}</td>
+            <td>${log.action}</td>
+            <td>${log.target_name || '-'}</td>
+            <td>${log.operator}</td>
+            <td>${log.created_at}</td>
+          </tr>
+        `).join('');
+      } catch (error) {
+        console.error('Error loading logs:', error);
+      }
+    }
+
+    function showLoading(show) {
+      document.getElementById('loadingOverlay').classList.toggle('active', show);
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') loadRecords();
+    });
+
+    document.getElementById('interestFilter').addEventListener('change', () => loadRecords(1));
+    document.getElementById('statusFilter').addEventListener('change', () => loadRecords(1));
+    document.getElementById('batchAction').addEventListener('change', function() {
+      document.getElementById('batchStatusGroup').style.display = 
+        this.value === 'status' ? 'block' : 'none';
+    });
+
+    accessToken = localStorage.getItem('access_token');
+    if (accessToken) {
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('adminPage').style.display = 'block';
+      loadRecords();
+      loadStatistics();
+    }
+  </script>
+</body>
+</html>

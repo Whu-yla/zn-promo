@@ -112,7 +112,13 @@
       margin-bottom: 20px;
     }
     .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-bright); }
-.highlight-brand { color: var(--accent-bright); font-weight: 800; }
+.hero .highlight-brand {
+      background: linear-gradient(135deg, rgb(225, 180, 76), #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
 .hero h1 {
       font-size: 30px; line-height: 1.25; font-weight: 800;
       margin-bottom: 16px; letter-spacing: -0.01em;
@@ -264,7 +270,6 @@
     .sol-card-img { aspect-ratio: 16/9; overflow: hidden; background: #0d2240; }
     .sol-card-img img { width: 100%; height: 100%; object-fit: cover; }
     .sol-card-body { padding: 20px; }
-    .sol-card-num {
       font-size: 12px; font-weight: 700; color: var(--accent-bright);
       letter-spacing: 0.1em; margin-bottom: 6px;
     }
@@ -314,7 +319,6 @@
     }
     .product-img .type-badge.hw { background: rgba(200,160,74,0.92); color: var(--bg-dark); }
     .product-body { padding: 22px; }
-    .product-code {
       font-size: 11px; font-weight: 700; color: var(--accent2);
       letter-spacing: 0.1em; margin-bottom: 6px;
     }
@@ -362,6 +366,23 @@
     .form-submit:hover { box-shadow: 0 8px 24px rgba(200, 160, 74, 0.45); }
     .form-submit:active { transform: scale(0.99); }
     .form-note { font-size: 12px; color: var(--muted); margin-top: 14px; text-align: center; line-height: 1.6; }
+    .form-error {
+      display: none; font-size: 12px; color: var(--danger);
+      margin-top: 4px;
+    }
+    .form-error.show { display: block; }
+    .form-hint {
+      font-size: 12px; color: var(--muted-light);
+      margin-top: 4px; text-align: right;
+    }
+    .form-row .error-input {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+    }
+    .form-row .success-input {
+      border-color: var(--success) !important;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1) !important;
+    }
     .form-success {
       display: none; text-align: center; padding: 32px 16px;
     }
@@ -373,6 +394,14 @@
     }
     .form-success h3 { font-size: 20px; color: var(--ink); margin-bottom: 8px; }
     .form-success p { font-size: 14px; color: var(--muted); }
+    .form-reset {
+      margin-top: 20px; padding: 10px 24px;
+      background: var(--accent2); color: #fff;
+      border: none; border-radius: 8px; font-size: 14px;
+      font-weight: 600; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .form-reset:hover { background: var(--accent2-bright); }
 
     /* === Contact info === */
     .contact-bar {
@@ -434,7 +463,7 @@
       <a href="#profile">公司简介</a>
       <a href="#core">核心支撑</a>
       <a href="#solutions">解决方案</a>
-      <a href="#products"><span class="highlight-brand">数智</span>产品</a>
+      <a href="#products">数智产品</a>
       <a href="#contact">联系我们</a>
     </div>
     <a href="#register" class="topnav-cta">合作登记</a>
@@ -446,10 +475,10 @@
   <div class="hero-bg"></div>
   <div class="container hero-inner">
     <span class="hero-badge"><span class="dot"></span>装备展 · 智慧应用解决方案</span>
-    <h1><span class="highlight-brand">中南</span>电力设计院·<span class="highlight-brand">数智</span>科技<br><span class="gold">智慧应用解决方案</span></h1>
+    <h1><span class="highlight-brand" data-text="中南">中南</span>电力设计院·<span class="highlight-brand" data-text="数智">数智</span>科技<br><span style="color:#ffffff">智慧应用解决方案</span></h1>
     <p class="hero-sub">世界500强中国能建旗下全资子公司，70年深耕能源电力工程，以"云、大、物、移、智、链"技术为基础，为能源电力全产业链提供数智化产品与服务。</p>
     <div class="hero-actions">
-      <a href="#products" class="btn-primary">查看<span class="highlight-brand">数智</span>产品 →</a>
+      <a href="#products" class="btn-primary">查看数智产品 →</a>
       <a href="#register" class="btn-outline">合作意向登记</a>
     </div>
     <div class="hero-stats">
@@ -467,7 +496,7 @@
     <div class="section-head">
       <span class="section-eyebrow">Company Profile</span>
       <h2 class="section-title">企业简介</h2>
-      <p class="section-desc">中国电力工程顾问集团<span class="highlight-brand">中南</span>电力设计院有限公司，创建于1954年，综合实力稳居行业前列。</p>
+      <p class="section-desc">中国电力工程顾问集团中南电力设计院有限公司，创建于1954年，综合实力稳居行业前列。</p>
     </div>
 
     <div class="profile-grid">
@@ -475,7 +504,7 @@
         <img src="./assets/company_building.png" alt="中南电力设计院公司大楼">
       </div>
       <div class="profile-content">
-        <p class="lead">中国电力工程顾问集团<span class="highlight-brand">中南</span>电力设计院有限公司（简称<span class="highlight-brand">中南</span>院）</p>
+        <p class="lead">中国电力工程顾问集团中南电力设计院有限公司（简称中南院）</p>
         <p>于1954年创建于湖北武汉，现为世界500强企业中国能源建设集团有限公司旗下全资子公司。自1993年起连续位居中国勘察设计综合实力百强，拥有工程设计综合甲级、工程勘察综合甲级、电力工程施工总承包壹级等20余项资质资信证书。</p>
         <p>公司构建了"六大主业、四强支撑、一项突出、一个提升"的"6411"业务格局，业务覆盖全球43个国家和全国31个省市自治区，聚焦传统电力、新能源与新型能源、生态环保、城镇建设、数字与信息等核心领域。</p>
         <div class="profile-tags">
@@ -506,8 +535,7 @@
   <div class="container">
     <div class="section-head">
       <span class="section-eyebrow">Digital Intelligence</span>
-      <h2 class="section-title"><span class="highlight-brand">数智</span>科技公司</h2>
-      <p class="section-desc">中南电力设计院数字化转型的重要依托，面向能源、环保、化工、市政、交通等领域提供数智化服务。</p>
+      <h2 class="section-title">数智科技公司</h2>
     </div>
 
     <div class="profile-grid">
@@ -565,7 +593,7 @@
       </div>
 
       <div class="platform-card" style="background:#fff">
-        <div class="platform-img"><img src="./assets/software_zhihuigongdi.jpg" alt="天空地海深一体化物联平台"></div>
+        <div class="platform-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=sky%20ground%20ocean%20deep%20sea%20integrated%20monitoring%20system%20satellite%20drone%20sensor%20network%20Beidou%20positioning%20IoT%20cyberpunk%20blue%20theme&image_size=landscape_16_9" alt="天空地海深一体化物联平台"></div>
         <div class="platform-body">
           <span class="platform-tag">物联平台</span>
           <h3 class="platform-title">天空地海深一体化</h3>
@@ -613,7 +641,6 @@
         <div class="sol-card">
           <div class="sol-card-img"><img src="./assets/software_zhihuigongdi.jpg" alt="智慧工地"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">03-1</div>
             <h3 class="sol-card-title">智慧工地</h3>
             <p class="sol-card-desc">建设"1+3+N"监控管理平台，打造多项目管理"驾驶舱"，实现工地现场管理模式从被动转变为主动，将施工安全隐患处理于发生之前。</p>
             <ul class="sol-card-points">
@@ -626,7 +653,6 @@
         <div class="sol-card">
           <div class="sol-card-img"><img src="./assets/software_zhihuidianchang.jpg" alt="智慧电厂"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">03-2</div>
             <h3 class="sol-card-title">智慧电厂</h3>
             <p class="sol-card-desc">实现"一个中心，二个半平台，三张网络，四个层级"智能电厂解决方案，具备自适应、自学习、自寻优功能，全面提升电厂运营效率。</p>
             <ul class="sol-card-points">
@@ -639,7 +665,6 @@
         <div class="sol-card">
           <div class="sol-card-img"><img src="./assets/software_zhihuianquan.jpg" alt="智慧安全"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">03-3</div>
             <h3 class="sol-card-title">智慧安全</h3>
             <p class="sol-card-desc">围绕预防、发现、处理、分析四个安全重点管理过程，针对人、车、作业、工器具、环境、程序6大安全管理对象打造主动式闭环安全管控体系。</p>
             <ul class="sol-card-points">
@@ -651,7 +676,6 @@
         <div class="sol-card">
           <div class="sol-card-img"><img src="./assets/software_sanweiyijiao.jpg" alt="三维数字化移交"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">03-4</div>
             <h3 class="sol-card-title">三维数字化移交</h3>
             <p class="sol-card-desc">基于BIM技术、融合GIS、物联网覆盖电厂基建全流程，实现设计、施工、运维数据的无缝衔接，为电厂数字化转型奠定核心数据基础。</p>
             <ul class="sol-card-points">
@@ -668,9 +692,8 @@
     <div class="sol-panel" data-panel="grid">
       <div class="sol-list">
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_shubian.jpg" alt="输变电数字化设计平台"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=electric%20power%20transmission%20design%20platform%20digital%20grid%20planning%20modern%20technology%20visualization%20blue%20theme&image_size=landscape_16_9" alt="输变电数字化设计平台"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">04-1</div>
             <h3 class="sol-card-title">输变电数字化设计平台</h3>
             <p class="sol-card-desc">构建国产自主可控的输电线路数字化勘测设计平台和变电数字化设计平台，实现输变电多专业协同设计、数字化正向设计、参数化建模。</p>
             <ul class="sol-card-points">
@@ -681,9 +704,8 @@
           </div>
         </div>
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_shubian.jpg" alt="输电线路数字化施工仿真平台"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=power%20transmission%20line%20construction%20simulation%20tower%20erection%20digital%20twin%20industrial%20engineering%20visualization&image_size=landscape_16_9" alt="输电线路数字化施工仿真平台"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">04-2</div>
             <h3 class="sol-card-title">输电线路数字化施工仿真平台</h3>
             <p class="sol-card-desc">构建"设计-加工-施工-验收"全链条协同建设管控体系，融合混合现实技术实现人机协同作业指导、工程车辆轨迹追踪、工艺工法推演。</p>
             <ul class="sol-card-points">
@@ -693,9 +715,8 @@
           </div>
         </div>
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_shubian.jpg" alt="输电线路运输设计平台"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=power%20transmission%20line%20transportation%20design%20cableway%20aerial%20transport%20route%20planning%20engineering%20logistics&image_size=landscape_16_9" alt="输电线路运输设计平台"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">04-3</div>
             <h3 class="sol-card-title">输电线路运输设计平台</h3>
             <p class="sol-card-desc">采用BIM、GIS、航摄、人工智能等技术构建输电线路数字通道，支持施工道路、人力运输、索道运输、空中运输方案设计，实现"一基一策"。</p>
             <ul class="sol-card-points">
@@ -705,9 +726,8 @@
           </div>
         </div>
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_shubian.jpg" alt="监测评估与健康诊断一体化平台"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=power%20line%20health%20monitoring%20diagnosis%20inspection%20drone%20thermal%20imaging%20safety%20assessment%20cyberpunk&image_size=landscape_16_9" alt="监测评估与健康诊断一体化平台"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">04-5</div>
             <h3 class="sol-card-title">监测评估与健康诊断一体化平台</h3>
             <p class="sol-card-desc">构建"数字孪生驱动、多源数据融合、智能闭环防控"的运维管理体系，对导地线、金具、绝缘子、杆塔、基础、边坡、通道等进行安全分析和评估。</p>
             <ul class="sol-card-points">
@@ -723,9 +743,8 @@
     <div class="sol-panel" data-panel="newenergy">
       <div class="sol-list">
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_fengdian.jpg" alt="风电智慧基建管控平台"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=wind%20farm%20construction%20management%20digital%20control%20center%20wind%20turbines%20infrastructure%20monitoring&image_size=landscape_16_9" alt="风电智慧基建管控平台"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">05-1</div>
             <h3 class="sol-card-title">风电智慧基建管控平台</h3>
             <p class="sol-card-desc">通过定期航拍影像与矢量叠加提供精准技术支撑，利用移动考勤和定位器实现人员实名制管控，基于AI巡检技术快速预警并监测人员行为。</p>
             <ul class="sol-card-points">
@@ -735,9 +754,8 @@
           </div>
         </div>
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_fengdian.jpg" alt="光伏智慧基建管控平台"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=solar%20power%20plant%20construction%20management%20photovoltaic%20panels%20digital%20monitoring%20sustainable%20energy&image_size=landscape_16_9" alt="光伏智慧基建管控平台"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">05-2</div>
             <h3 class="sol-card-title">光伏智慧基建管控平台</h3>
             <p class="sol-card-desc">依托大数据、云计算、人工智能、实景三维等信息化手段，利用无人机、机器人进行自动缺陷识别，提升发电量5%-10%，巡检工作量减少40%-75%。</p>
             <ul class="sol-card-points">
@@ -747,9 +765,8 @@
           </div>
         </div>
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_fengdian.jpg" alt="风电智慧运维平台"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=wind%20solar%20power%20plant%20intelligent%20operation%20maintenance%20drone%20inspection%20predictive%20maintenance&image_size=landscape_16_9" alt="风电智慧运维平台"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">05-3</div>
             <h3 class="sol-card-title">风电/光伏智慧运维平台</h3>
             <p class="sol-card-desc">深度融合GIS、三维可视化、物联网、大数据、人工智能算法，建立风场三维模型，将生产、管理、安全、经营数据与设备数字化模型绑定，实现全方位智能化运维。</p>
             <ul class="sol-card-points">
@@ -759,9 +776,8 @@
           </div>
         </div>
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_fengdian.jpg" alt="新能源集控中心"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=renewable%20energy%20central%20control%20center%20smart%20grid%20integration%20wind%20solar%20energy%20management%20dashboard&image_size=landscape_16_9" alt="新能源集控中心"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">05-5</div>
             <h3 class="sol-card-title">新能源集控中心</h3>
             <p class="sol-card-desc">围绕"战略穿透、业务协同、生态共生"三大核心诉求，构建"纵向贯通管控链路、横向融合业务场景、内外联动产业生态"的智慧运营体系。</p>
             <ul class="sol-card-points">
@@ -777,9 +793,8 @@
     <div class="sol-panel" data-panel="others">
       <div class="sol-list">
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_zhihuidianchang.jpg" alt="智能楼宇系统管理平台"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=smart%20building%20system%20management%20green%20energy%20efficient%20office%20IoT%20integration%20modern%20architecture&image_size=landscape_16_9" alt="智能楼宇系统管理平台"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">06-1</div>
             <h3 class="sol-card-title">智能楼宇系统管理平台</h3>
             <p class="sol-card-desc">以"三维BIM+数字孪生+人工智能AI"三大技术为核心，通过技术与建筑深度融合，帮助建筑使用者打造绿色低碳环保的节能型智慧楼宇标杆系统。</p>
             <ul class="sol-card-points">
@@ -789,9 +804,8 @@
           </div>
         </div>
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_zhihuidianchang.jpg" alt="智慧园区"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=smart%20industrial%20park%20energy%20management%20mining%20control%20sustainability%20digital%20twin%20ecological&image_size=landscape_16_9" alt="智慧园区"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">06-2</div>
             <h3 class="sol-card-title">智慧园区（含矿山管控）</h3>
             <p class="sol-card-desc">从能源规划、运营、安全、环保四维度发力，利用数字孪生、大数据、AI技术打造智慧能源管理系统，构建绿色低碳能源网、智慧高效数字网"双网"基础。</p>
             <ul class="sol-card-points">
@@ -801,9 +815,8 @@
           </div>
         </div>
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_zhihuidianchang.jpg" alt="网信实施"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cybersecurity%20network%20infrastructure%205G%20deployment%20NFV%20virtualization%20enterprise%20network%20security&image_size=landscape_16_9" alt="网信实施"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">06-3</div>
             <h3 class="sol-card-title">网信实施</h3>
             <p class="sol-card-desc">独立规划个人用户(ToC)和政企客户(ToB)两张核心网络，运用NFV网络功能虚拟化技术，采用控制面、用户面分离的方式进行网络部署。</p>
             <ul class="sol-card-points">
@@ -813,9 +826,8 @@
           </div>
         </div>
         <div class="sol-card">
-          <div class="sol-card-img"><img src="./assets/software_zhihuidianchang.jpg" alt="信创改造"></div>
+          <div class="sol-card-img"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20cloud%20infrastructure%20server%20racks%20data%20center%20futuristic%20technology%20abstract%20digital%20architecture%20blue%20cyber%20glow%20no%20text&image_size=landscape_16_9" alt="信创改造"></div>
           <div class="sol-card-body">
-            <div class="sol-card-num">06-4</div>
             <h3 class="sol-card-title">信创改造</h3>
             <p class="sol-card-desc">基于ARM和国产X86架构自主研发"一云多芯"的云平台，全面构筑开放的软硬件生态，完成类操作系统、中间件、数据库、国产化芯片和应用厂商的适配。</p>
             <ul class="sol-card-points">
@@ -850,7 +862,6 @@
           <span class="type-badge hw">硬件装备</span>
         </div>
         <div class="product-body">
-          <div class="product-code">07-1 · XUANWU SSK</div>
           <h3 class="product-name">玄武SSK · 受限空间作业安全管控套装</h3>
           <p class="product-desc">集成多合一气体检测仪、智能安全帽、无线自组网基站、声光报警装置等模块，实现有限空间作业场景的环境感知、人员防护、实时监控与风险闭环管理。</p>
           <div class="product-specs">
@@ -863,11 +874,10 @@
 
       <div class="product-card">
         <div class="product-img">
-          <img src="./assets/hardware_srk.jpg" alt="玄武SRK智能监控设备">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=black%20rugged%20industrial%20handheld%20PDA%20device%20front%20view%20three%20camera%20lenses%20on%20top%20with%20LED%20flash%20lights%20shield%20badge%20with%20SR%20logo%20and%20geometric%20star%20pattern%20touchscreen%20display%20on%20right%20industrial%20hardware%20design%20gray%20gradient%20background%20product%20photography%20professional%20studio%20lighting&image_size=square" alt="玄武SRK智能监控设备">
           <span class="type-badge hw">硬件装备</span>
         </div>
         <div class="product-body">
-          <div class="product-code">07-1 · XUANWU SRK</div>
           <h3 class="product-name">玄武SRK · 智能监控设备</h3>
           <p class="product-desc">集成北斗定位、远程控制、AI识别、实时对讲、无线传输等功能的智能监控设备，后台对接文鳐—智巡万安，实现现场作业安全的实时监控与AI隐患识别。</p>
           <div class="product-specs">
@@ -884,7 +894,6 @@
           <span class="type-badge hw">硬件装备</span>
         </div>
         <div class="product-body">
-          <div class="product-code">07-1 · XUANWU SPK</div>
           <h3 class="product-name">玄武SPK · 高空作业安全管控套装</h3>
           <p class="product-desc">专为高空作业场景设计，集成智能追踪摄像头（AI识别算法）与智能安全带监测穿戴设备（高精度传感器），秒级采集安全带状态与人员姿态，异常时触发声光报警。</p>
           <div class="product-specs">
@@ -901,7 +910,6 @@
           <span class="type-badge hw">硬件装备</span>
         </div>
         <div class="product-body">
-          <div class="product-code">07-1 · XUANWU SIK</div>
           <h3 class="product-name">玄武SIK · 智能巡检隐患识别管控套装</h3>
           <p class="product-desc">创新性集成无人机巡检与AI智能识别功能，搭载高清变焦摄像头与红外热成像模块，AI识别算法经海量样本训练，识别准确率达90%以上，发现隐患即时标注位置并生成预警报告。</p>
           <div class="product-specs">
@@ -914,16 +922,15 @@
 
       <div class="product-card">
         <div class="product-img">
-          <img src="./assets/hardware_eic.jpg" alt="玄武EIC高空风能PLC控制器">
+          <img src="./assets/hardware_eic.jpg" alt="玄武EIC工业级PLC控制器">
           <span class="type-badge hw">硬件装备</span>
         </div>
         <div class="product-body">
-          <div class="product-code">07-1 · XUANWU EIC</div>
-          <h3 class="product-name">玄武EIC · 高空风能PLC控制器</h3>
-          <p class="product-desc">专为高空风能发电系统打造的可编程逻辑控制器，实现对高空伞梯式/旋翼式风能发电装备的精准协同控制与运行状态监测，保障高空风能系统在复杂风况下的稳定高效运行。</p>
+          <h3 class="product-name">玄武EIC · 工业级PLC控制器</h3>
+          <p class="product-desc">高性能工业级可编程逻辑控制器，支持多行业场景的精准协同控制与运行状态监测，适用于高空风能、智慧楼宇、工业自动化等多种应用场景，保障设备在复杂环境下的稳定高效运行。</p>
           <div class="product-specs">
-            <div class="product-spec"><span class="key">控制对象：</span>高空伞梯 · 旋翼 · 系留缆绳 · 发电机组</div>
-            <div class="product-spec"><span class="key">核心能力：</span>实时姿态解算 · 风况自适应 · 协同调度 · 故障保护</div>
+            <div class="product-spec"><span class="key">应用场景：</span>高空风能 · 智慧楼宇 · 工业自动化 · 新能源</div>
+            <div class="product-spec"><span class="key">核心能力：</span>实时控制 · 自适应调度 · 协同管理 · 故障保护</div>
             <div class="product-spec"><span class="key">通信接口：</span>双冗余以太网 · RS485 · CAN · 4G/5G远传</div>
             <div class="product-spec"><span class="key">防护等级：</span>IP65 · 宽温 -40℃~+70℃ · Din-rail导轨安装</div>
           </div>
@@ -936,7 +943,6 @@
           <span class="type-badge hw">硬件装备</span>
         </div>
         <div class="product-body">
-          <div class="product-code">07-1 · XUANWU SCU</div>
           <h3 class="product-name">玄武SCU · 边缘计算AI盒子</h3>
           <p class="product-desc">面向电厂、变电站等现场场景的边缘AI推理设备，内置高性能GPU/NPU加速单元，支持深度学习模型本地化部署，实现视频流实时分析、设备状态智能诊断与毫秒级隐患识别，数据不出场、时延更低。</p>
           <div class="product-specs">
@@ -961,7 +967,6 @@
           <span class="type-badge">软件产品</span>
         </div>
         <div class="product-body">
-          <div class="product-code">07-2 · WENYAO 智巡万安</div>
           <h3 class="product-name">文鳐 · 智巡万安</h3>
           <p class="product-desc">依托AI替代传统人工巡检，基于深度学习、计算机视觉和自然语言处理技术，依托10万+自有标注数据集，实现27类隐患、93项现场实体共209种隐患的自动识别。</p>
           <div class="product-specs">
@@ -974,11 +979,10 @@
 
       <div class="product-card">
         <div class="product-img">
-          <img src="./assets/software_kexin.jpg" alt="可信数据空间平台">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=secure%20data%20space%20blockchain%20data%20management%20digital%20vault%20cybersecurity%20encryption%20smart%20contract%20data%20governance%20blue%20futuristic%20abstract%20technology&image_size=landscape_16_9" alt="可信数据空间平台">
           <span class="type-badge">软件产品</span>
         </div>
         <div class="product-body">
-          <div class="product-code">07-2 · 可信数据空间</div>
           <h3 class="product-name">可信数据空间 · 数据资产平台</h3>
           <p class="product-desc">依托阿里开源可信数据空间框架，结合电力工程业务场景定制化开发，实现数据全流程可信管控与价值挖掘，保障数据主权与安全共享。</p>
           <div class="product-specs">
@@ -1043,26 +1047,30 @@
         <div class="form-grid-2">
           <div class="form-row">
             <label>姓名 <span class="req">*</span></label>
-            <input type="text" name="name" required placeholder="请输入您的姓名">
+            <input type="text" name="name" required placeholder="请输入您的姓名" maxlength="50" onblur="validateName(this)">
+            <span class="form-error" id="err-name"></span>
           </div>
           <div class="form-row">
             <label>单位名称 <span class="req">*</span></label>
-            <input type="text" name="company" required placeholder="请输入您的单位名称">
+            <input type="text" name="company" required placeholder="请输入您的单位名称" maxlength="100" onblur="validateCompany(this)">
+            <span class="form-error" id="err-company"></span>
           </div>
         </div>
         <div class="form-grid-2">
           <div class="form-row">
             <label>手机号码 <span class="req">*</span></label>
-            <input type="tel" name="phone" required pattern="^1[3-9]\d{9}$" placeholder="请输入11位手机号">
+            <input type="tel" name="phone" required placeholder="请输入11位手机号" maxlength="11" onblur="validatePhone(this)" oninput="formatPhone(this)">
+            <span class="form-error" id="err-phone"></span>
           </div>
           <div class="form-row">
             <label>电子邮箱</label>
-            <input type="email" name="email" placeholder="请输入邮箱地址">
+            <input type="email" name="email" placeholder="请输入邮箱地址" maxlength="100" onblur="validateEmail(this)">
+            <span class="form-error" id="err-email"></span>
           </div>
         </div>
         <div class="form-row">
           <label>感兴趣的方向 <span class="req">*</span></label>
-          <select name="interest" required>
+          <select name="interest" required onchange="validateInterest(this)">
             <option value="">请选择您感兴趣的合作方向</option>
             <option value="core">核心支撑平台（智孪万维/智电万通等）</option>
             <option value="powerplant">电厂数字解决方案</option>
@@ -1073,10 +1081,12 @@
             <option value="software">文鳐系列软件产品</option>
             <option value="custom">定制化项目合作</option>
           </select>
+          <span class="form-error" id="err-interest"></span>
         </div>
         <div class="form-row">
           <label>合作意向说明</label>
-          <textarea name="message" placeholder="请简要描述您的合作需求、应用场景或希望了解的产品详情..."></textarea>
+          <textarea name="message" placeholder="请简要描述您的合作需求、应用场景或希望了解的产品详情..." maxlength="500" oninput="updateCharCount(this)"></textarea>
+          <span class="form-hint" id="hint-message">0/500</span>
         </div>
         <button type="submit" class="form-submit">提交合作意向</button>
         <p class="form-note">提交后我们将有专人在1-3个工作日内与您联系。<br>您的信息将严格保密，仅用于合作沟通。</p>
@@ -1086,6 +1096,7 @@
         <div class="icon">✓</div>
         <h3>提交成功！</h3>
         <p>感谢您的关注，我们将在1-3个工作日内与您联系。<br>如有紧急需求，请直接拨打：027-67816116</p>
+        <button class="form-reset" onclick="resetForm()">再次提交</button>
       </div>
     </div>
   </div>
@@ -1103,14 +1114,14 @@
         </div>
       </div>
       <div class="contact-item">
-        <div class="ci-icon">⌖</div>
+        <div class="ci-icon">📍</div>
         <div>
           <div class="ci-label">公司地址</div>
           <div class="ci-value">湖北省武汉市武昌区中南路12号</div>
         </div>
       </div>
       <div class="contact-item">
-        <div class="ci-icon">⌂</div>
+        <div class="ci-icon">🌐</div>
         <div>
           <div class="ci-label">官方网站</div>
           <div class="ci-value">www.znsz.site</div>
@@ -1140,30 +1151,175 @@
     });
   });
 
-  // Form submit
-  function submitForm(e) {
+  function validateName(input) {
+    var err = document.getElementById('err-name');
+    var value = input.value.trim();
+    if (!value) {
+      showError(input, err, '请输入姓名');
+      return false;
+    }
+    if (value.length > 50) {
+      showError(input, err, '姓名不能超过50个字符');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function validateCompany(input) {
+    var err = document.getElementById('err-company');
+    var value = input.value.trim();
+    if (!value) {
+      showError(input, err, '请输入单位名称');
+      return false;
+    }
+    if (value.length > 100) {
+      showError(input, err, '单位名称不能超过100个字符');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function validatePhone(input) {
+    var err = document.getElementById('err-phone');
+    var value = input.value.trim();
+    if (!value) {
+      showError(input, err, '请输入手机号码');
+      return false;
+    }
+    if (!/^1[3-9]\d{9}$/.test(value)) {
+      showError(input, err, '请输入有效的11位手机号');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function formatPhone(input) {
+    input.value = input.value.replace(/\D/g, '').slice(0, 11);
+  }
+
+  function validateEmail(input) {
+    var err = document.getElementById('err-email');
+    var value = input.value.trim();
+    if (!value) {
+      clearError(input, err);
+      return true;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      showError(input, err, '请输入有效的邮箱地址');
+      return false;
+    }
+    if (value.length > 100) {
+      showError(input, err, '邮箱地址不能超过100个字符');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function validateInterest(input) {
+    var err = document.getElementById('err-interest');
+    if (!input.value) {
+      showError(input, err, '请选择感兴趣的方向');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function updateCharCount(textarea) {
+    var hint = document.getElementById('hint-message');
+    hint.textContent = textarea.value.length + '/500';
+  }
+
+  function showError(input, errEl, message) {
+    input.classList.add('error-input');
+    input.classList.remove('success-input');
+    errEl.textContent = message;
+    errEl.classList.add('show');
+  }
+
+  function clearError(input, errEl) {
+    input.classList.remove('error-input');
+    input.classList.add('success-input');
+    errEl.textContent = '';
+    errEl.classList.remove('show');
+  }
+
+  function validateForm() {
+    var valid = true;
+    valid = validateName(document.querySelector('input[name="name"]')) && valid;
+    valid = validateCompany(document.querySelector('input[name="company"]')) && valid;
+    valid = validatePhone(document.querySelector('input[name="phone"]')) && valid;
+    valid = validateEmail(document.querySelector('input[name="email"]')) && valid;
+    valid = validateInterest(document.querySelector('select[name="interest"]')) && valid;
+    return valid;
+  }
+
+  async function submitForm(e) {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      var firstError = document.querySelector('.error-input');
+      if (firstError) firstError.focus();
+      return false;
+    }
+
     var form = document.getElementById('regForm');
-    var data = new FormData(form);
-    // Build a mailto or just store locally - here we simulate submission
-    var name = data.get('name');
-    var company = data.get('company');
-    var phone = data.get('phone');
-    var email = data.get('email') || '未填写';
-    var interest = data.get('interest');
-    var message = data.get('message') || '无';
+    var submitBtn = form.querySelector('.form-submit');
+    
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="btn-loading">⏳</span> 提交中...';
+    
+    try {
+      var formData = new FormData(form);
+      var data = {
+        name: formData.get('name').trim(),
+        company: formData.get('company').trim(),
+        phone: formData.get('phone').trim(),
+        email: formData.get('email').trim() || '',
+        interest: formData.get('interest'),
+        message: formData.get('message').trim() || ''
+      };
 
-    // Save to localStorage as a simple record mechanism
-    var records = JSON.parse(localStorage.getItem('zn_cooperation_records') || '[]');
-    records.push({
-      name: name, company: company, phone: phone, email: email,
-      interest: interest, message: message, time: new Date().toISOString()
-    });
-    localStorage.setItem('zn_cooperation_records', JSON.stringify(records));
+      var response = await fetch('http://localhost:8000/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
 
-    form.style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
+      if (response.ok) {
+        form.style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      } else {
+        var err = await response.json();
+        alert('提交失败：' + (err.detail || '请稍后重试'));
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('网络连接失败，请检查网络或稍后重试');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '提交合作意向';
+    }
     return false;
+  }
+
+  function resetForm() {
+    var form = document.getElementById('regForm');
+    form.reset();
+    document.getElementById('formSuccess').style.display = 'none';
+    form.style.display = 'block';
+    document.getElementById('hint-message').textContent = '0/500';
+    var errors = document.querySelectorAll('.form-error');
+    errors.forEach(function(e) { e.classList.remove('show'); });
+    var inputs = document.querySelectorAll('.error-input, .success-input');
+    inputs.forEach(function(i) { i.classList.remove('error-input', 'success-input'); });
+    document.querySelector('input[name="name"]').focus();
   }
 
   // Smooth scroll for nav links
