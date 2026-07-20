@@ -112,7 +112,35 @@
       margin-bottom: 20px;
     }
     .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-bright); }
-.highlight-brand { color: var(--accent-bright); font-weight: 800; }
+.hero .highlight-brand {
+      background: linear-gradient(135deg, #00f5ff, #7b2fff, #ff00ff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+      text-shadow: 0 0 20px rgba(0, 245, 255, 0.6), 0 0 40px rgba(123, 47, 255, 0.4), 0 0 60px rgba(255, 0, 255, 0.2);
+      animation: brandGlow 3s ease-in-out infinite;
+      position: relative;
+    }
+    .hero .highlight-brand::before {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      z-index: -1;
+      background: linear-gradient(135deg, #00f5ff, #7b2fff, #ff00ff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: blur(8px);
+      opacity: 0.7;
+      animation: brandGlow 3s ease-in-out infinite;
+    }
+    @keyframes brandGlow {
+      0%, 100% { background-position: 0% 50%; text-shadow: 0 0 20px rgba(0, 245, 255, 0.6), 0 0 40px rgba(123, 47, 255, 0.4), 0 0 60px rgba(255, 0, 255, 0.2); }
+      50% { background-position: 100% 50%; text-shadow: 0 0 30px rgba(0, 245, 255, 0.8), 0 0 60px rgba(123, 47, 255, 0.6), 0 0 90px rgba(255, 0, 255, 0.4); }
+    }
 .hero h1 {
       font-size: 30px; line-height: 1.25; font-weight: 800;
       margin-bottom: 16px; letter-spacing: -0.01em;
@@ -434,7 +462,7 @@
       <a href="#profile">公司简介</a>
       <a href="#core">核心支撑</a>
       <a href="#solutions">解决方案</a>
-      <a href="#products"><span class="highlight-brand">数智</span>产品</a>
+      <a href="#products">数智产品</a>
       <a href="#contact">联系我们</a>
     </div>
     <a href="#register" class="topnav-cta">合作登记</a>
@@ -446,10 +474,10 @@
   <div class="hero-bg"></div>
   <div class="container hero-inner">
     <span class="hero-badge"><span class="dot"></span>装备展 · 智慧应用解决方案</span>
-    <h1><span class="highlight-brand">中南</span>电力设计院·<span class="highlight-brand">数智</span>科技<br><span class="gold">智慧应用解决方案</span></h1>
+    <h1><span class="highlight-brand" data-text="中南">中南</span>电力设计院·<span class="highlight-brand" data-text="数智">数智</span>科技<br><span class="gold">智慧应用解决方案</span></h1>
     <p class="hero-sub">世界500强中国能建旗下全资子公司，70年深耕能源电力工程，以"云、大、物、移、智、链"技术为基础，为能源电力全产业链提供数智化产品与服务。</p>
     <div class="hero-actions">
-      <a href="#products" class="btn-primary">查看<span class="highlight-brand">数智</span>产品 →</a>
+      <a href="#products" class="btn-primary">查看数智产品 →</a>
       <a href="#register" class="btn-outline">合作意向登记</a>
     </div>
     <div class="hero-stats">
@@ -467,7 +495,7 @@
     <div class="section-head">
       <span class="section-eyebrow">Company Profile</span>
       <h2 class="section-title">企业简介</h2>
-      <p class="section-desc">中国电力工程顾问集团<span class="highlight-brand">中南</span>电力设计院有限公司，创建于1954年，综合实力稳居行业前列。</p>
+      <p class="section-desc">中国电力工程顾问集团中南电力设计院有限公司，创建于1954年，综合实力稳居行业前列。</p>
     </div>
 
     <div class="profile-grid">
@@ -475,7 +503,7 @@
         <img src="./assets/company_building.png" alt="中南电力设计院公司大楼">
       </div>
       <div class="profile-content">
-        <p class="lead">中国电力工程顾问集团<span class="highlight-brand">中南</span>电力设计院有限公司（简称<span class="highlight-brand">中南</span>院）</p>
+        <p class="lead">中国电力工程顾问集团中南电力设计院有限公司（简称中南院）</p>
         <p>于1954年创建于湖北武汉，现为世界500强企业中国能源建设集团有限公司旗下全资子公司。自1993年起连续位居中国勘察设计综合实力百强，拥有工程设计综合甲级、工程勘察综合甲级、电力工程施工总承包壹级等20余项资质资信证书。</p>
         <p>公司构建了"六大主业、四强支撑、一项突出、一个提升"的"6411"业务格局，业务覆盖全球43个国家和全国31个省市自治区，聚焦传统电力、新能源与新型能源、生态环保、城镇建设、数字与信息等核心领域。</p>
         <div class="profile-tags">
@@ -506,7 +534,7 @@
   <div class="container">
     <div class="section-head">
       <span class="section-eyebrow">Digital Intelligence</span>
-      <h2 class="section-title"><span class="highlight-brand">数智</span>科技公司</h2>
+      <h2 class="section-title">数智科技公司</h2>
       <p class="section-desc">中南电力设计院数字化转型的重要依托，面向能源、环保、化工、市政、交通等领域提供数智化服务。</p>
     </div>
 
