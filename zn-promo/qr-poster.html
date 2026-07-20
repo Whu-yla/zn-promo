@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>扫码查看 - 中南电力数智科技</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -14,21 +15,28 @@
       min-height: 100vh; padding: 20px;
     }
     .poster {
-      width: 420px;
+      width: 440px;
       background: #ffffff;
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     }
+    /* 顶部头图区域 */
     .poster-header {
-      background: linear-gradient(135deg, #0a1f3d 0%, #102a4c 100%);
-      padding: 32px 28px 28px;
+      background: linear-gradient(135deg, #0a1f3d 0%, #102a4c 50%, #0a1f3d 100%);
+      padding: 36px 28px 28px;
       text-align: center;
       position: relative;
+      overflow: hidden;
+    }
+    .poster-header::before {
+      content: ''; position: absolute; top: -50px; right: -50px;
+      width: 150px; height: 150px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(230,184,77,0.15) 0%, transparent 70%);
     }
     .poster-header::after {
       content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
-      background: linear-gradient(90deg, #c8a04a, #e6b84d);
+      background: linear-gradient(90deg, transparent, #c8a04a, #e6b84d, #c8a04a, transparent);
     }
     .logo-row {
       display: flex; align-items: center; justify-content: center;
@@ -38,64 +46,152 @@
       padding: 12px 20px;
       width: fit-content;
       margin-left: auto; margin-right: auto;
+      position: relative; z-index: 1;
     }
     .logo-row img {
       width: 120px; height: auto; display: block;
     }
     .header-title {
-      color: #e6b84d; font-size: 22px; font-weight: 800; margin-bottom: 6px;
+      color: #e6b84d; font-size: 24px; font-weight: 800; margin-bottom: 8px;
+      letter-spacing: 0.02em;
+      position: relative; z-index: 1;
     }
     .header-sub {
       color: #cbd5e1; font-size: 13px; line-height: 1.6;
+      position: relative; z-index: 1;
+    }
+
+    /* 数据亮点栏 */
+    .stats-bar {
+      display: flex; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      padding: 18px 16px; border-bottom: 1px solid #e2e8f0;
+    }
+    .stat-item {
+      flex: 1; text-align: center; position: relative;
+    }
+    .stat-item:not(:last-child)::after {
+      content: ''; position: absolute; right: 0; top: 20%; bottom: 20%;
+      width: 1px; background: #cbd5e1;
+    }
+    .stat-num {
+      font-size: 22px; font-weight: 800; color: #0a1f3d; line-height: 1.2;
+    }
+    .stat-num span { color: #c8a04a; }
+    .stat-label {
+      font-size: 11px; color: #64748b; margin-top: 4px;
     }
 
     .poster-body {
-      padding: 32px 28px;
+      padding: 28px 28px 24px;
       text-align: center;
     }
     .qr-container {
-      display: inline-block; padding: 16px;
+      display: inline-block; padding: 14px;
       background: #fff; border: 2px solid #e2e8f0; border-radius: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(10,31,61,0.08);
     }
-    .qr-container img {
-      width: 240px; height: 240px; display: block;
+    .qr-container::before, .qr-container::after {
+      content: ''; position: absolute; width: 20px; height: 20px;
+      border: 3px solid #e6b84d;
     }
+    .qr-container::before {
+      top: -2px; left: -2px; border-right: none; border-bottom: none;
+      border-top-left-radius: 8px;
+    }
+    .qr-container::after {
+      bottom: -2px; right: -2px; border-left: none; border-top: none;
+      border-bottom-right-radius: 8px;
+    }
+    #qrcode { width: 220px; height: 220px; }
+    #qrcode img, #qrcode canvas { width: 220px; height: 220px; display: block; }
     .scan-tip {
-      font-size: 18px; font-weight: 700; color: #0a1f3d;
-      margin-bottom: 8px;
+      font-size: 19px; font-weight: 700; color: #0a1f3d;
+      margin-bottom: 6px;
     }
     .scan-desc {
       font-size: 13px; color: #64748b; line-height: 1.7;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
+
+    /* 核心优势 */
+    .advantages {
+      background: linear-gradient(135deg, #0a1f3d 0%, #15294a 100%);
+      border-radius: 12px; padding: 18px 16px;
+      margin-bottom: 22px; text-align: left;
+    }
+    .adv-title {
+      color: #e6b84d; font-size: 14px; font-weight: 700;
+      margin-bottom: 12px; text-align: center;
+      letter-spacing: 0.05em;
+    }
+    .adv-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+    }
+    .adv-item {
+      text-align: center; padding: 8px 4px;
+    }
+    .adv-item .adv-icon {
+      font-size: 22px; margin-bottom: 6px;
+    }
+    .adv-item .adv-name {
+      font-size: 12px; color: #e2e8f0; font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .adv-item .adv-desc {
+      font-size: 10px; color: #94a3b8; line-height: 1.4;
+    }
+
+    /* 产品导航 */
     .features {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-      margin-bottom: 24px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;
+      margin-bottom: 22px;
     }
     .feature-item {
-      background: #f1f5f9; border-radius: 8px; padding: 12px 8px;
-      text-align: center;
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 8px; padding: 12px 6px;
+      text-align: center; transition: all 0.2s;
     }
-    .feature-item .icon { font-size: 20px; margin-bottom: 4px; }
-    .feature-item .text { font-size: 12px; color: #334155; font-weight: 600; }
+    .feature-item .icon { font-size: 22px; margin-bottom: 4px; }
+    .feature-item .text { font-size: 11px; color: #334155; font-weight: 600; }
 
+    /* 联系方式 */
     .contact-strip {
-      background: #f1f5f9; border-radius: 10px; padding: 16px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 16px;
       text-align: left;
     }
     .contact-strip .row {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 13px; color: #334155; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: #334155; margin-bottom: 8px;
     }
     .contact-strip .row:last-child { margin-bottom: 0; }
-    .contact-strip .label { font-weight: 700; color: #0a1f3d; min-width: 60px; }
+    .contact-strip .c-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #0a1f3d; color: #e6b84d;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .contact-strip .label { font-weight: 700; color: #0a1f3d; }
 
+    /* 底部 */
     .poster-footer {
-      background: #0a1f3d; padding: 14px 28px; text-align: center;
+      background: linear-gradient(135deg, #0a1f3d 0%, #102a4c 100%);
+      padding: 16px 28px; text-align: center;
+      position: relative;
+    }
+    .poster-footer::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, #c8a04a, transparent);
     }
     .poster-footer .slogan {
-      color: #e6b84d; font-size: 13px; font-weight: 600; letter-spacing: 0.05em;
+      color: #e6b84d; font-size: 14px; font-weight: 700; letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    .poster-footer .slogan-sub {
+      color: #94a3b8; font-size: 11px; letter-spacing: 0.05em;
     }
 
     .print-note {
@@ -105,13 +201,14 @@
 
     @media print {
       body { background: #fff; padding: 0; }
-      .poster { box-shadow: none; width: 100%; max-width: 420px; margin: 0 auto; border-radius: 0; }
+      .poster { box-shadow: none; width: 100%; max-width: 440px; margin: 0 auto; border-radius: 0; }
       .print-note { display: none; }
     }
   </style>
 </head>
 <body>
   <div class="poster">
+    <!-- 顶部头图 -->
     <div class="poster-header">
       <div class="logo-row">
         <img src="./assets/logo_vertical_clean.png" alt="中南数智 - Central Southern Digital Intelligence">
@@ -120,13 +217,53 @@
       <div class="header-sub">世界500强中国能建旗下 · 70年电力工程深耕</div>
     </div>
 
+    <!-- 数据亮点栏 -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-num"><span>70</span>年</div>
+        <div class="stat-label">电力工程经验</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">世界<span>500</span>强</div>
+        <div class="stat-label">中国能建旗下</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num"><span>8</span>大方向</div>
+        <div class="stat-label">数智化解决方案</div>
+      </div>
+    </div>
+
     <div class="poster-body">
+      <!-- 二维码 -->
       <div class="qr-container">
-        <img src="./assets/qr_code.png" alt="扫码访问宣传页">
+        <div id="qrcode"></div>
       </div>
       <div class="scan-tip">扫一扫 · 查看完整内容</div>
       <div class="scan-desc">手机扫码即可查看公司及产品详细介绍<br>并可在线提交合作意向</div>
 
+      <!-- 核心优势 -->
+      <div class="advantages">
+        <div class="adv-title">— 核心优势 —</div>
+        <div class="adv-grid">
+          <div class="adv-item">
+            <div class="adv-icon">🏆</div>
+            <div class="adv-name">技术领先</div>
+            <div class="adv-desc">自主研发核心技术</div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-icon">⚡</div>
+            <div class="adv-name">快速响应</div>
+            <div class="adv-desc">7×24小时服务</div>
+          </div>
+          <div class="adv-item">
+            <div class="adv-icon">🛡️</div>
+            <div class="adv-name">安全可靠</div>
+            <div class="adv-desc">工业级品质保障</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 内容导航 -->
       <div class="features">
         <div class="feature-item">
           <div class="icon">📋</div>
@@ -146,17 +283,41 @@
         </div>
       </div>
 
+      <!-- 联系方式 -->
       <div class="contact-strip">
-        <div class="row"><span class="label">电话：</span>027-67816116</div>
-        <div class="row"><span class="label">地址：</span>湖北省武汉市武昌区中南路12号</div>
-        <div class="row"><span class="label">网址：</span>www.znsz.site</div>
+        <div class="row">
+          <div class="c-icon">📞</div>
+          <span><span class="label">电话：</span>027-67816116</span>
+        </div>
+        <div class="row">
+          <div class="c-icon">📍</div>
+          <span><span class="label">地址：</span>湖北省武汉市武昌区中南路12号</span>
+        </div>
+        <div class="row">
+          <div class="c-icon">🌐</div>
+          <span><span class="label">网址：</span>www.znsz.site</span>
+        </div>
       </div>
     </div>
 
+    <!-- 底部 -->
     <div class="poster-footer">
       <div class="slogan">智能一点，世界亮一点</div>
+      <div class="slogan-sub">CENTRAL SOUTH DIGITAL INTELLIGENCE</div>
     </div>
   </div>
   <div class="print-note">提示：按 Ctrl+P 可打印此海报，建议彩色打印</div>
+
+  <script>
+    // 动态生成二维码
+    new QRCode(document.getElementById("qrcode"), {
+      text: "http://www.szkj.site/zn-promo.html",
+      width: 220,
+      height: 220,
+      colorDark: "#0a1f3d",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
 </body>
 </html>
