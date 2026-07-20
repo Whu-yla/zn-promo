@@ -366,6 +366,23 @@
     .form-submit:hover { box-shadow: 0 8px 24px rgba(200, 160, 74, 0.45); }
     .form-submit:active { transform: scale(0.99); }
     .form-note { font-size: 12px; color: var(--muted); margin-top: 14px; text-align: center; line-height: 1.6; }
+    .form-error {
+      display: none; font-size: 12px; color: var(--danger);
+      margin-top: 4px;
+    }
+    .form-error.show { display: block; }
+    .form-hint {
+      font-size: 12px; color: var(--muted-light);
+      margin-top: 4px; text-align: right;
+    }
+    .form-row .error-input {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+    }
+    .form-row .success-input {
+      border-color: var(--success) !important;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1) !important;
+    }
     .form-success {
       display: none; text-align: center; padding: 32px 16px;
     }
@@ -377,6 +394,14 @@
     }
     .form-success h3 { font-size: 20px; color: var(--ink); margin-bottom: 8px; }
     .form-success p { font-size: 14px; color: var(--muted); }
+    .form-reset {
+      margin-top: 20px; padding: 10px 24px;
+      background: var(--accent2); color: #fff;
+      border: none; border-radius: 8px; font-size: 14px;
+      font-weight: 600; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .form-reset:hover { background: var(--accent2-bright); }
 
     /* === Contact info === */
     .contact-bar {
@@ -1022,26 +1047,30 @@
         <div class="form-grid-2">
           <div class="form-row">
             <label>姓名 <span class="req">*</span></label>
-            <input type="text" name="name" required placeholder="请输入您的姓名">
+            <input type="text" name="name" required placeholder="请输入您的姓名" maxlength="50" onblur="validateName(this)">
+            <span class="form-error" id="err-name"></span>
           </div>
           <div class="form-row">
             <label>单位名称 <span class="req">*</span></label>
-            <input type="text" name="company" required placeholder="请输入您的单位名称">
+            <input type="text" name="company" required placeholder="请输入您的单位名称" maxlength="100" onblur="validateCompany(this)">
+            <span class="form-error" id="err-company"></span>
           </div>
         </div>
         <div class="form-grid-2">
           <div class="form-row">
             <label>手机号码 <span class="req">*</span></label>
-            <input type="tel" name="phone" required pattern="^1[3-9]\d{9}$" placeholder="请输入11位手机号">
+            <input type="tel" name="phone" required placeholder="请输入11位手机号" maxlength="11" onblur="validatePhone(this)" oninput="formatPhone(this)">
+            <span class="form-error" id="err-phone"></span>
           </div>
           <div class="form-row">
             <label>电子邮箱</label>
-            <input type="email" name="email" placeholder="请输入邮箱地址">
+            <input type="email" name="email" placeholder="请输入邮箱地址" maxlength="100" onblur="validateEmail(this)">
+            <span class="form-error" id="err-email"></span>
           </div>
         </div>
         <div class="form-row">
           <label>感兴趣的方向 <span class="req">*</span></label>
-          <select name="interest" required>
+          <select name="interest" required onchange="validateInterest(this)">
             <option value="">请选择您感兴趣的合作方向</option>
             <option value="core">核心支撑平台（智孪万维/智电万通等）</option>
             <option value="powerplant">电厂数字解决方案</option>
@@ -1052,10 +1081,12 @@
             <option value="software">文鳐系列软件产品</option>
             <option value="custom">定制化项目合作</option>
           </select>
+          <span class="form-error" id="err-interest"></span>
         </div>
         <div class="form-row">
           <label>合作意向说明</label>
-          <textarea name="message" placeholder="请简要描述您的合作需求、应用场景或希望了解的产品详情..."></textarea>
+          <textarea name="message" placeholder="请简要描述您的合作需求、应用场景或希望了解的产品详情..." maxlength="500" oninput="updateCharCount(this)"></textarea>
+          <span class="form-hint" id="hint-message">0/500</span>
         </div>
         <button type="submit" class="form-submit">提交合作意向</button>
         <p class="form-note">提交后我们将有专人在1-3个工作日内与您联系。<br>您的信息将严格保密，仅用于合作沟通。</p>
@@ -1065,6 +1096,7 @@
         <div class="icon">✓</div>
         <h3>提交成功！</h3>
         <p>感谢您的关注，我们将在1-3个工作日内与您联系。<br>如有紧急需求，请直接拨打：027-67816116</p>
+        <button class="form-reset" onclick="resetForm()">再次提交</button>
       </div>
     </div>
   </div>
@@ -1119,24 +1151,137 @@
     });
   });
 
-  // Form submit
+  function validateName(input) {
+    var err = document.getElementById('err-name');
+    var value = input.value.trim();
+    if (!value) {
+      showError(input, err, '请输入姓名');
+      return false;
+    }
+    if (value.length > 50) {
+      showError(input, err, '姓名不能超过50个字符');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function validateCompany(input) {
+    var err = document.getElementById('err-company');
+    var value = input.value.trim();
+    if (!value) {
+      showError(input, err, '请输入单位名称');
+      return false;
+    }
+    if (value.length > 100) {
+      showError(input, err, '单位名称不能超过100个字符');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function validatePhone(input) {
+    var err = document.getElementById('err-phone');
+    var value = input.value.trim();
+    if (!value) {
+      showError(input, err, '请输入手机号码');
+      return false;
+    }
+    if (!/^1[3-9]\d{9}$/.test(value)) {
+      showError(input, err, '请输入有效的11位手机号');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function formatPhone(input) {
+    input.value = input.value.replace(/\D/g, '').slice(0, 11);
+  }
+
+  function validateEmail(input) {
+    var err = document.getElementById('err-email');
+    var value = input.value.trim();
+    if (!value) {
+      clearError(input, err);
+      return true;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      showError(input, err, '请输入有效的邮箱地址');
+      return false;
+    }
+    if (value.length > 100) {
+      showError(input, err, '邮箱地址不能超过100个字符');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function validateInterest(input) {
+    var err = document.getElementById('err-interest');
+    if (!input.value) {
+      showError(input, err, '请选择感兴趣的方向');
+      return false;
+    }
+    clearError(input, err);
+    return true;
+  }
+
+  function updateCharCount(textarea) {
+    var hint = document.getElementById('hint-message');
+    hint.textContent = textarea.value.length + '/500';
+  }
+
+  function showError(input, errEl, message) {
+    input.classList.add('error-input');
+    input.classList.remove('success-input');
+    errEl.textContent = message;
+    errEl.classList.add('show');
+  }
+
+  function clearError(input, errEl) {
+    input.classList.remove('error-input');
+    input.classList.add('success-input');
+    errEl.textContent = '';
+    errEl.classList.remove('show');
+  }
+
+  function validateForm() {
+    var valid = true;
+    valid = validateName(document.querySelector('input[name="name"]')) && valid;
+    valid = validateCompany(document.querySelector('input[name="company"]')) && valid;
+    valid = validatePhone(document.querySelector('input[name="phone"]')) && valid;
+    valid = validateEmail(document.querySelector('input[name="email"]')) && valid;
+    valid = validateInterest(document.querySelector('select[name="interest"]')) && valid;
+    return valid;
+  }
+
   async function submitForm(e) {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      var firstError = document.querySelector('.error-input');
+      if (firstError) firstError.focus();
+      return false;
+    }
+
     var form = document.getElementById('regForm');
     var submitBtn = form.querySelector('.form-submit');
     
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '提交中...';
+    submitBtn.innerHTML = '<span class="btn-loading">⏳</span> 提交中...';
     
     try {
       var formData = new FormData(form);
       var data = {
-        name: formData.get('name'),
-        company: formData.get('company'),
-        phone: formData.get('phone'),
-        email: formData.get('email') || '',
+        name: formData.get('name').trim(),
+        company: formData.get('company').trim(),
+        phone: formData.get('phone').trim(),
+        email: formData.get('email').trim() || '',
         interest: formData.get('interest'),
-        message: formData.get('message') || ''
+        message: formData.get('message').trim() || ''
       };
 
       var response = await fetch('http://localhost:8000/api/submit', {
@@ -1151,7 +1296,8 @@
         form.style.display = 'none';
         document.getElementById('formSuccess').style.display = 'block';
       } else {
-        alert('提交失败，请稍后重试');
+        var err = await response.json();
+        alert('提交失败：' + (err.detail || '请稍后重试'));
       }
     } catch (error) {
       console.error('Error:', error);
@@ -1161,6 +1307,19 @@
       submitBtn.innerHTML = '提交合作意向';
     }
     return false;
+  }
+
+  function resetForm() {
+    var form = document.getElementById('regForm');
+    form.reset();
+    document.getElementById('formSuccess').style.display = 'none';
+    form.style.display = 'block';
+    document.getElementById('hint-message').textContent = '0/500';
+    var errors = document.querySelectorAll('.form-error');
+    errors.forEach(function(e) { e.classList.remove('show'); });
+    var inputs = document.querySelectorAll('.error-input, .success-input');
+    inputs.forEach(function(i) { i.classList.remove('error-input', 'success-input'); });
+    document.querySelector('input[name="name"]').focus();
   }
 
   // Smooth scroll for nav links
