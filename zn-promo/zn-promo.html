@@ -1120,28 +1120,46 @@
   });
 
   // Form submit
-  function submitForm(e) {
+  async function submitForm(e) {
     e.preventDefault();
     var form = document.getElementById('regForm');
-    var data = new FormData(form);
-    // Build a mailto or just store locally - here we simulate submission
-    var name = data.get('name');
-    var company = data.get('company');
-    var phone = data.get('phone');
-    var email = data.get('email') || '未填写';
-    var interest = data.get('interest');
-    var message = data.get('message') || '无';
+    var submitBtn = form.querySelector('.form-submit');
+    
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '提交中...';
+    
+    try {
+      var formData = new FormData(form);
+      var data = {
+        name: formData.get('name'),
+        company: formData.get('company'),
+        phone: formData.get('phone'),
+        email: formData.get('email') || '',
+        interest: formData.get('interest'),
+        message: formData.get('message') || ''
+      };
 
-    // Save to localStorage as a simple record mechanism
-    var records = JSON.parse(localStorage.getItem('zn_cooperation_records') || '[]');
-    records.push({
-      name: name, company: company, phone: phone, email: email,
-      interest: interest, message: message, time: new Date().toISOString()
-    });
-    localStorage.setItem('zn_cooperation_records', JSON.stringify(records));
+      var response = await fetch('http://localhost:8000/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
 
-    form.style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
+      if (response.ok) {
+        form.style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      } else {
+        alert('提交失败，请稍后重试');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('网络连接失败，请检查网络或稍后重试');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '提交合作意向';
+    }
     return false;
   }
 

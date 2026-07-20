@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>合作登记管理后台 | 中南电力数智科技</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .header {
+      background: linear-gradient(135deg, #0a1f3d, #102a4c);
+      color: #fff;
+      padding: 20px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .header h1 { font-size: 20px; font-weight: 700; }
+    .header .logo {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 8px;
+    }
+    .header .logo img { height: 32px; }
+    .header .logo span { font-size: 14px; font-weight: 600; }
+    .header .stats { display: flex; gap: 24px; }
+    .stat-item { text-align: right; }
+    .stat-item .num { font-size: 24px; font-weight: 800; color: #e6b84d; }
+    .stat-item .label { font-size: 12px; color: #94a3b8; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .search-bar {
+      background: #fff; border-radius: 12px; padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex; gap: 16px; align-items: center;
+      margin-bottom: 20px;
+    }
+    .search-bar input, .search-bar select {
+      padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px;
+      font-size: 14px; font-family: inherit;
+    }
+    .search-bar input { flex: 1; max-width: 300px; }
+    .search-bar button {
+      padding: 10px 20px; background: #1e5bb8; color: #fff;
+      border: none; border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .search-bar button:hover { background: #2563eb; }
+
+    .table-wrap {
+      background: #fff; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th {
+      background: #f8fafc; font-weight: 700; font-size: 13px; color: #64748b;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    td { font-size: 14px; color: #334155; }
+    tr:hover { background: #f8fafc; }
+    .tag {
+      display: inline-block; padding: 4px 10px; border-radius: 4px;
+      font-size: 12px; font-weight: 600;
+    }
+    .tag.core { background: #dbeafe; color: #1d4ed8; }
+    .tag.powerplant { background: #fef3c7; color: #d97706; }
+    .tag.grid { background: #dcfce7; color: #16a34a; }
+    .tag.newenergy { background: #fce7f3; color: #be185d; }
+    .tag.others { background: #ede9fe; color: #6d28d9; }
+    .tag.hardware { background: #fed7aa; color: #ea580c; }
+    .tag.software { background: #bfdbfe; color: #2563eb; }
+    .tag.custom { background: #f3f4f6; color: #374151; }
+
+    .actions { display: flex; gap: 8px; }
+    .btn-view {
+      padding: 6px 12px; background: #1e5bb8; color: #fff;
+      border: none; border-radius: 6px; font-size: 12px; cursor: pointer;
+    }
+    .btn-delete {
+      padding: 6px 12px; background: #dc2626; color: #fff;
+      border: none; border-radius: 6px; font-size: 12px; cursor: pointer;
+    }
+    .btn-view:hover { background: #2563eb; }
+    .btn-delete:hover { background: #ef4444; }
+
+    .pagination {
+      display: flex; justify-content: center; align-items: center;
+      gap: 8px; padding: 20px;
+    }
+    .pagination button {
+      padding: 8px 16px; border: 1px solid #e2e8f0;
+      background: #fff; border-radius: 6px; font-size: 14px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .pagination button:hover { background: #f1f5f9; }
+    .pagination button.active {
+      background: #1e5bb8; color: #fff; border-color: #1e5bb8;
+    }
+    .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: #fff; border-radius: 16px; padding: 24px;
+      max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-content h3 { font-size: 18px; margin-bottom: 20px; }
+    .modal-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .modal-row .label { min-width: 80px; font-weight: 600; color: #64748b; }
+    .modal-row .value { flex: 1; word-break: break-all; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+    .modal-actions button {
+      padding: 10px 20px; border-radius: 8px; font-size: 14px; cursor: pointer;
+    }
+    .btn-cancel { background: #f1f5f9; border: none; color: #64748b; }
+    .btn-confirm { background: #dc2626; border: none; color: #fff; }
+
+    .empty { text-align: center; padding: 60px 20px; color: #94a3b8; }
+    .empty .icon { font-size: 48px; margin-bottom: 16px; }
+    .empty p { font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <img src="./assets/logo_vertical_clean.png" alt="中南数智">
+      <span>合作登记管理</span>
+    </div>
+    <div class="stats">
+      <div class="stat-item">
+        <div class="num" id="totalCount">0</div>
+        <div class="label">总登记数</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="搜索姓名、公司、电话...">
+      <select id="interestFilter">
+        <option value="">全部方向</option>
+        <option value="core">核心支撑平台</option>
+        <option value="powerplant">电厂数字解决方案</option>
+        <option value="grid">电网数字解决方案</option>
+        <option value="newenergy">新能源数字解决方案</option>
+        <option value="others">其他数字化解决方案</option>
+        <option value="hardware">玄武系列硬件装备</option>
+        <option value="software">文鳐系列软件产品</option>
+        <option value="custom">定制化项目合作</option>
+      </select>
+      <button onclick="loadRecords()">搜索</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>单位</th>
+            <th>电话</th>
+            <th>邮箱</th>
+            <th>感兴趣方向</th>
+            <th>提交时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="recordList">
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination" id="pagination">
+    </div>
+  </div>
+
+  <div class="modal" id="viewModal">
+    <div class="modal-content">
+      <h3>登记详情</h3>
+      <div class="modal-row"><span class="label">ID：</span><span class="value" id="viewId"></span></div>
+      <div class="modal-row"><span class="label">姓名：</span><span class="value" id="viewName"></span></div>
+      <div class="modal-row"><span class="label">单位：</span><span class="value" id="viewCompany"></span></div>
+      <div class="modal-row"><span class="label">电话：</span><span class="value" id="viewPhone"></span></div>
+      <div class="modal-row"><span class="label">邮箱：</span><span class="value" id="viewEmail"></span></div>
+      <div class="modal-row"><span class="label">方向：</span><span class="value" id="viewInterest"></span></div>
+      <div class="modal-row"><span class="label">说明：</span><span class="value" id="viewMessage"></span></div>
+      <div class="modal-row"><span class="label">时间：</span><span class="value" id="viewTime"></span></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="deleteModal">
+    <div class="modal-content">
+      <h3>确认删除</h3>
+      <p>确定要删除这条登记记录吗？此操作不可恢复。</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeDeleteModal()">取消</button>
+        <button class="btn-confirm" onclick="confirmDelete()">确认删除</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:8000/api';
+    let currentPage = 1;
+    let totalPages = 1;
+    let deleteId = null;
+
+    const interestMap = {
+      'core': '核心支撑平台',
+      'powerplant': '电厂数字解决方案',
+      'grid': '电网数字解决方案',
+      'newenergy': '新能源数字解决方案',
+      'others': '其他数字化解决方案',
+      'hardware': '玄武系列硬件装备',
+      'software': '文鳐系列软件产品',
+      'custom': '定制化项目合作'
+    };
+
+    async function loadRecords(page = 1) {
+      currentPage = page;
+      const search = document.getElementById('searchInput').value;
+      const interest = document.getElementById('interestFilter').value;
+      
+      let url = `${API_BASE}/records?page=${page}`;
+      
+      try {
+        const response = await fetch(url);
+        const records = await response.json();
+        
+        const countResponse = await fetch(`${API_BASE}/count`);
+        const countData = await countResponse.json();
+        document.getElementById('totalCount').textContent = countData.count;
+        
+        totalPages = Math.ceil(countData.count / 20);
+        
+        renderTable(records);
+        renderPagination();
+      } catch (error) {
+        console.error('Error loading records:', error);
+        alert('加载失败，请检查后端服务是否运行');
+      }
+    }
+
+    function renderTable(records) {
+      const tbody = document.getElementById('recordList');
+      
+      if (records.length === 0) {
+        tbody.innerHTML = `
+          <tr><td colspan="8" class="empty">
+            <div class="icon">📋</div>
+            <p>暂无登记记录</p>
+          </td></tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = records.map(record => `
+        <tr>
+          <td>${record.id}</td>
+          <td>${record.name}</td>
+          <td>${record.company}</td>
+          <td>${record.phone}</td>
+          <td>${record.email || '-'}</td>
+          <td><span class="tag ${record.interest}">${interestMap[record.interest] || record.interest}</span></td>
+          <td>${record.created_at}</td>
+          <td class="actions">
+            <button class="btn-view" onclick="viewRecord(${record.id})">查看</button>
+            <button class="btn-delete" onclick="showDeleteModal(${record.id})">删除</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderPagination() {
+      const pagination = document.getElementById('pagination');
+      let html = '';
+      
+      html += `<button onclick="loadRecords(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>上一页</button>`;
+      
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button onclick="loadRecords(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+      }
+      
+      html += `<button onclick="loadRecords(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>下一页</button>`;
+      
+      pagination.innerHTML = html;
+    }
+
+    async function viewRecord(id) {
+      try {
+        const response = await fetch(`${API_BASE}/records/${id}`);
+        const record = await response.json();
+        
+        document.getElementById('viewId').textContent = record.id;
+        document.getElementById('viewName').textContent = record.name;
+        document.getElementById('viewCompany').textContent = record.company;
+        document.getElementById('viewPhone').textContent = record.phone;
+        document.getElementById('viewEmail').textContent = record.email || '未填写';
+        document.getElementById('viewInterest').textContent = interestMap[record.interest] || record.interest;
+        document.getElementById('viewMessage').textContent = record.message || '无';
+        document.getElementById('viewTime').textContent = record.created_at;
+        
+        document.getElementById('viewModal').classList.add('active');
+      } catch (error) {
+        console.error('Error viewing record:', error);
+        alert('查看失败');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('viewModal').classList.remove('active');
+    }
+
+    function showDeleteModal(id) {
+      deleteId = id;
+      document.getElementById('deleteModal').classList.add('active');
+    }
+
+    function closeDeleteModal() {
+      deleteId = null;
+      document.getElementById('deleteModal').classList.remove('active');
+    }
+
+    async function confirmDelete() {
+      if (!deleteId) return;
+      
+      try {
+        const response = await fetch(`${API_BASE}/records/${deleteId}`, {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          closeDeleteModal();
+          loadRecords(currentPage);
+        } else {
+          alert('删除失败');
+        }
+      } catch (error) {
+        console.error('Error deleting record:', error);
+        alert('删除失败');
+      }
+    }
+
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') loadRecords();
+    });
+
+    document.getElementById('interestFilter').addEventListener('change', function() {
+      loadRecords(1);
+    });
+
+    loadRecords();
+  </script>
+</body>
+</html>
