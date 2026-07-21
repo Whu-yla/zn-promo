@@ -270,7 +270,7 @@
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(3, 7, 18, 0.8), transparent);
     }
-    .platform-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .platform-img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.5s ease; }
     .platform-card:hover .platform-img img { transform: scale(1.08); }
     .platform-body { padding: 24px; }
     .platform-tag {
@@ -324,7 +324,7 @@
     }
     .sol-card:hover { border-color: var(--accent-cyan); box-shadow: 0 0 30px rgba(34, 211, 238, 0.15); }
     .sol-card-img { aspect-ratio: 16/9; overflow: hidden; background: #0f172a; }
-    .sol-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .sol-card-img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
     .sol-card-body { padding: 24px; }
     .sol-card-title { font-family: var(--font-display); font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 10px; }
     .sol-card-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
@@ -360,7 +360,7 @@
       box-shadow: 0 15px 40px rgba(34, 211, 238, 0.15);
     }
     .product-img { aspect-ratio: 4/3; overflow: hidden; background: #0f172a; position: relative; }
-    .product-img img { width: 100%; height: 100%; object-fit: cover; }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
     .product-img .type-badge {
       position: absolute; top: 14px; right: 14px;
       background: rgba(3, 7, 18, 0.9);
