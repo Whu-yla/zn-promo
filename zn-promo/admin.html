@@ -270,11 +270,11 @@
       </div>
       <div class="form-group">
         <label>用户名</label>
-        <input type="text" id="username" placeholder="请输入用户名" value="admin">
+        <input type="text" id="username" placeholder="请输入用户名">
       </div>
       <div class="form-group">
         <label>密码</label>
-        <input type="password" id="password" placeholder="请输入密码" value="admin123">
+        <input type="password" id="password" placeholder="请输入密码">
       </div>
       <button class="btn-login" onclick="handleLogin()">登录</button>
       <div class="error" id="loginError"></div>
@@ -443,7 +443,7 @@
   </div>
 
   <script>
-    const API_BASE = 'http://localhost:8000/api';
+    const API_BASE = '/api';
     let accessToken = '';
     let currentPage = 1;
     let totalPages = 1;
@@ -473,7 +473,7 @@
       error.textContent = '';
 
       try {
-        const response = await fetch('http://localhost:8000/token', {
+        const response = await fetch('/token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
@@ -508,7 +508,13 @@
     async function fetchWithAuth(url, options = {}) {
       options.headers = options.headers || {};
       options.headers['Authorization'] = `Bearer ${accessToken}`;
-      return fetch(url, options);
+      const response = await fetch(url, options);
+      if (response.status === 401) {
+        handleLogout();
+        showToast('登录已过期，请重新登录', 'error');
+        throw new Error('Unauthorized');
+      }
+      return response;
     }
 
     async function loadRecords(page = 1) {
