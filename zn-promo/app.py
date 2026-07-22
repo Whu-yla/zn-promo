@@ -64,7 +64,7 @@ class CooperationRecordOut(BaseModel):
     message: str
     status: str
     created_at: str
-    updated_at: str
+    updated_at: str = ""
 
 class StatusUpdate(BaseModel):
     status: str = Field(..., description="状态")
@@ -200,7 +200,7 @@ async def submit_cooperation(data: CooperationRecord):
         log_operation("submit", record_id, data.name)
         return CooperationRecordOut(
             id=row[0], name=row[1], company=row[2], phone=row[3], email=row[4],
-            interest=row[5], message=row[6], status=row[7], created_at=row[8], updated_at=row[9]
+            interest=row[5], message=row[6], status=row[8], created_at=row[7], updated_at=row[9]
         )
     except Exception as e:
         conn.rollback()
@@ -255,7 +255,7 @@ async def get_records(
         
         return [CooperationRecordOut(
             id=row[0], name=row[1], company=row[2], phone=row[3], email=row[4],
-            interest=row[5], message=row[6], status=row[7], created_at=row[8], updated_at=row[9]
+            interest=row[5], message=row[6], status=row[8], created_at=row[7], updated_at=row[9]
         ) for row in rows]
     finally:
         conn.close()
@@ -271,7 +271,7 @@ async def get_record(record_id: int, current_user: str = Depends(get_current_use
             raise HTTPException(status_code=404, detail="记录不存在")
         return CooperationRecordOut(
             id=row[0], name=row[1], company=row[2], phone=row[3], email=row[4],
-            interest=row[5], message=row[6], status=row[7], created_at=row[8], updated_at=row[9]
+            interest=row[5], message=row[6], status=row[8], created_at=row[7], updated_at=row[9]
         )
     finally:
         conn.close()
@@ -484,7 +484,7 @@ async def export_data(
             writer.writerow([
                 row[0], row[1], row[2], row[3], row[4],
                 interest_map.get(row[5], row[5]), row[6],
-                status_map.get(row[7], row[7]), row[8], row[9]
+                status_map.get(row[8], row[8]), row[7], row[9]
             ])
         
         output.seek(0)
