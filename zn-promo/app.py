@@ -654,32 +654,41 @@ async def trigger_check():
     except Exception as e:
         return {"success": False, "message": str(e)}
 
+SERVICE_MAP = {
+    "nginx": "nginx",
+    "zn-promo-api": "zn-promo-api",
+    "zn-promo-watchdog": "zn-promo-watchdog",
+    "feishu-warren": "feishu-gateway-warren",
+    "hermes-gateway": "hermes-gateway",
+}
+
 @app.post("/api/monitor/fix/{service_id}", summary="一键修复服务")
 async def fix_service(service_id: str):
-    """重启异常服务"""
-    import subprocess
-    import json as json_mod
-    MONITOR_DIR = os.path.dirname(__file__)
+    systemd_name = SERVICE_MAP.get(service_id)
+    if not systemd_name:
+        return {"success": False, "message": f"未知服务: {service_id}"}
+    
     try:
-        script = (
-            "import sys, json; sys.path.insert(0, %r); "
-            "from monitor import fix_service, run_checks; "
-            "ok, msg = fix_service(%r); "
-            "print(json.dumps({'success': ok, 'message': msg}))"
-        ) % (MONITOR_DIR, service_id)
-        result = subprocess.run(
-            ["python3", "-c", script],
-            capture_output=True, text=True, timeout=30
-        )
-        try:
-            data = json_mod.loads(result.stdout.strip())
-            if data.get("success"):
-                # 修复成功后触发一次检查更新状态
-                subprocess.run(["python3", os.path.join(MONITOR_DIR, "monitor.py"), "--once"],
-                              capture_output=True, timeout=30)
-            return data
-        except:
-            return {"success": False, "message": result.stderr or "修复失败"}
+        import subprocess, os, signal
+        
+        # 如果修复的是API自己，会断开当前连接，需要特殊处理
+        if service_id == "zn-promo-api":
+            subprocess.Popen(
+                ["bash", "-c", "sleep 1 && DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus /usr/bin/systemctl restart zn-promo-api"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+            return {"success": True, "message": "API 正在重启（页面会短暂断开后自动恢复）"}
+        
+        # 修复其他服务
+        svc_flag = "--user" if service_id == "hermes-gateway" else ""
+        cmd = f"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus /usr/bin/systemctl {svc_flag} restart {systemd_name}"
+        r = subprocess.run(["bash", "-c", cmd], capture_output=True, text=True, timeout=30)
+        if r.returncode == 0:
+            subprocess.run(["python3", os.path.join(os.path.dirname(__file__), "monitor.py"), "--once"],
+                          capture_output=True, timeout=30)
+            return {"success": True, "message": f"{systemd_name} 已重启"}
+        
+        return {"success": False, "message": f"重启失败: {r.stderr.strip() or '错误码: ' + str(r.returncode)}"}
     except Exception as e:
         return {"success": False, "message": str(e)}
 
