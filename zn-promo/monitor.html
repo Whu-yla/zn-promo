@@ -164,13 +164,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
         </select>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>API 地址</label><input id="smsApiUrl" placeholder="https://api.sms.com/send"></div>
-        <div class="form-group"><label>API Key</label><input id="smsApiKey" placeholder="app_key"></div>
+        <div class="form-group"><label>API Key (AccessKey ID)</label><input id="smsApiKey" placeholder="LTAI5t..."></div>
+        <div class="form-group"><label>API Secret (AccessKey Secret)</label><input id="smsApiSecret" type="password" placeholder=""></div>
       </div>
-      <div class="form-group">
-        <label>API Secret</label>
-        <input id="smsApiSecret" type="password" placeholder="app_secret">
-        <div class="hint">使用阿里云/腾讯云时需填写</div>
+      <div class="form-row">
+        <div class="form-group"><label>短信签名</label><input id="aliyunSignName" placeholder="阿里云短信测试"></div>
+        <div class="form-group"><label>短信模板 Code</label><input id="aliyunTemplateCode" placeholder="SMS_154950909"></div>
       </div>
       <div class="form-group"><label>接收手机号（多个用逗号分隔）</label><input id="smsPhones" placeholder="13800138000, 13900139000"></div>
       <div class="btn-group">
@@ -267,13 +266,17 @@ function renderStatus(data) {
   Object.values(services).forEach(s => {
     const card = document.createElement('div');
     card.className = 'service-card';
+    const isFixable = s.status === 'down' && ['nginx','zn-promo-api','zn-promo-watchdog','feishu-warren','hermes-gateway'].includes(s.id);
     card.innerHTML = `
       <div class="status-icon">${s.status === 'up' ? '✅' : '❌'}</div>
       <div class="info">
         <div class="name">${s.name}</div>
         <div class="detail">${s.detail} · ${s.checked_at || ''}</div>
       </div>
-      <div class="status-badge ${s.status}">${s.status === 'up' ? '正常' : '异常'}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <div class="status-badge ${s.status}">${s.status === 'up' ? '正常' : '异常'}</div>
+        ${isFixable ? `<button class="btn btn-sm btn-outline" style="border-color:#ef4444;color:#ef4444;" onclick="fixService('${s.id}')">🔧 一键修复</button>` : ''}
+      </div>
     `;
     grid.appendChild(card);
   });
@@ -323,6 +326,8 @@ async function loadConfig() {
     document.getElementById('smsApiUrl').value = sms.api_url || '';
     document.getElementById('smsApiKey').value = sms.api_key || '';
     document.getElementById('smsApiSecret').value = sms.api_secret || '';
+    document.getElementById('aliyunSignName').value = sms.aliyun_sign_name || '';
+    document.getElementById('aliyunTemplateCode').value = sms.aliyun_template_code || '';
     document.getElementById('smsPhones').value = (sms.phone_numbers || []).join(', ');
 
     // Global
@@ -350,6 +355,8 @@ async function saveConfig() {
       api_url: document.getElementById('smsApiUrl').value,
       api_key: document.getElementById('smsApiKey').value,
       api_secret: document.getElementById('smsApiSecret').value,
+      aliyun_sign_name: document.getElementById('aliyunSignName').value,
+      aliyun_template_code: document.getElementById('aliyunTemplateCode').value,
       phone_numbers: document.getElementById('smsPhones').value.split(',').map(s => s.trim()).filter(Boolean)
     },
     global: {
@@ -420,6 +427,22 @@ async function triggerCheck() {
     }
   } catch(e) {
     flash('检查失败: ' + e.message, 'error');
+  }
+}
+
+async function fixService(serviceId) {
+  if (!confirm('确认要重启该服务吗？')) return;
+  try {
+    const r = await fetch(API_BASE + '/fix/' + serviceId, { method: 'POST' });
+    const result = await r.json();
+    if (result.success) {
+      flash('✅ ' + result.message, 'success');
+      loadStatus();
+    } else {
+      flash('❌ ' + result.message, 'error');
+    }
+  } catch(e) {
+    flash('修复失败: ' + e.message, 'error');
   }
 }
 

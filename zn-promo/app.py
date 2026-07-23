@@ -593,6 +593,35 @@ async def trigger_check():
     except Exception as e:
         return {"success": False, "message": str(e)}
 
+@app.post("/api/monitor/fix/{service_id}", summary="一键修复服务")
+async def fix_service(service_id: str):
+    """重启异常服务"""
+    import subprocess
+    import json as json_mod
+    MONITOR_DIR = os.path.dirname(__file__)
+    try:
+        script = (
+            "import sys, json; sys.path.insert(0, %r); "
+            "from monitor import fix_service, run_checks; "
+            "ok, msg = fix_service(%r); "
+            "print(json.dumps({'success': ok, 'message': msg}))"
+        ) % (MONITOR_DIR, service_id)
+        result = subprocess.run(
+            ["python3", "-c", script],
+            capture_output=True, text=True, timeout=30
+        )
+        try:
+            data = json_mod.loads(result.stdout.strip())
+            if data.get("success"):
+                # 修复成功后触发一次检查更新状态
+                subprocess.run(["python3", os.path.join(MONITOR_DIR, "monitor.py"), "--once"],
+                              capture_output=True, timeout=30)
+            return data
+        except:
+            return {"success": False, "message": result.stderr or "修复失败"}
+    except Exception as e:
+        return {"success": False, "message": str(e)}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

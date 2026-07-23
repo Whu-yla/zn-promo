@@ -58,6 +58,8 @@ DEFAULT_CONFIG = {
         "api_url": "",
         "api_key": "",
         "api_secret": "",
+        "aliyun_sign_name": "",
+        "aliyun_template_code": "",
         "phone_numbers": []
     },
     "global": {
@@ -97,6 +99,32 @@ def save_status(status):
     with open(STATUS_FILE, 'w') as f:
         json.dump(status, f, ensure_ascii=False, indent=2)
 
+def fix_service(svc_id):
+    """Try to fix a service by restarting it"""
+    for svc in SERVICES:
+        if svc["id"] != svc_id:
+            continue
+        try:
+            if svc["type"] == "systemd":
+                r = subprocess.run(["systemctl", "restart", svc["service"]], capture_output=True, text=True, timeout=30)
+                if r.returncode == 0:
+                    return True, f"{svc['name']} 重启成功"
+                else:
+                    return False, f"重启失败: {r.stderr.strip()}"
+            elif svc["type"] == "systemd_user":
+                env = os.environ.copy()
+                env["XDG_RUNTIME_DIR"] = "/run/user/0"
+                r = subprocess.run(["systemctl", "--user", "restart", svc["service"]], capture_output=True, text=True, timeout=30, env=env)
+                if r.returncode == 0:
+                    return True, f"{svc['name']} 重启成功"
+                else:
+                    return False, f"重启失败: {r.stderr.strip()}"
+            else:
+                return False, f"{svc['name']} 不支持一键修复"
+        except Exception as e:
+            return False, str(e)
+    return False, "未找到服务"
+
 def check_systemd(service_name):
     try:
         r = subprocess.run(["systemctl", "is-active", service_name], capture_output=True, text=True, timeout=10)
@@ -106,8 +134,15 @@ def check_systemd(service_name):
 
 def check_systemd_user(service_name):
     try:
-        r = subprocess.run(["systemctl", "--user", "is-active", service_name], capture_output=True, text=True, timeout=10)
-        return r.stdout.strip() == "active", r.stdout.strip()
+        env = os.environ.copy()
+        env["XDG_RUNTIME_DIR"] = "/run/user/0"
+        r = subprocess.run(["systemctl", "--user", "is-active", service_name],
+                          capture_output=True, text=True, timeout=10, env=env)
+        if r.stdout.strip() == "active":
+            return True, "active"
+        # Fallback: check process
+        r2 = subprocess.run(["pgrep", "-f", service_name], capture_output=True, timeout=5)
+        return r2.returncode == 0, "active (by process)" if r2.returncode == 0 else "inactive"
     except Exception as e:
         return False, str(e)
 
@@ -212,22 +247,58 @@ def send_sms_alert(config, content):
     
     try:
         if sms_cfg.get("provider") == "aliyun":
-            # 阿里云短信接口
-            # 用户需要配置自己的阿里云短信模板
-            logger.info("阿里云短信发送（需配置模板）")
-        elif sms_cfg.get("api_url"):
-            # 通用HTTP API
+            from alibabacloud_dysmsapi20170525.client import Client as DysmsapiClient
+            from alibabacloud_dysmsapi20170525 import models as dysmsapi_models
+            from alibabacloud_tea_openapi import models as open_api_models
+            
+            access_key_id = sms_cfg.get("api_key", "")
+            access_key_secret = sms_cfg.get("api_secret", "")
+            sign_name = sms_cfg.get("aliyun_sign_name", "")
+            template_code = sms_cfg.get("aliyun_template_code", "")
+            
+            if not all([access_key_id, access_key_secret, sign_name, template_code]):
+                logger.warning("阿里云短信配置不完整，跳过发送")
+                return False
+            
+            api_config = open_api_models.Config(
+                access_key_id=access_key_id,
+                access_key_secret=access_key_secret
+            )
+            api_config.endpoint = 'dysmsapi.aliyuncs.com'
+            client = DysmsapiClient(api_config)
+            
+            # Template param: pass the alert content as a variable
+            import json as _json
+            template_param = _json.dumps({"content": content[:50]}, ensure_ascii=False)
+            
+            request = dysmsapi_models.SendSmsRequest(
+                phone_numbers=",".join(sms_cfg["phone_numbers"]),
+                sign_name=sign_name,
+                template_code=template_code,
+                template_param=template_param
+            )
+            response = client.send_sms(request)
+            body = response.body
+            if body.code == "OK":
+                logger.info(f"阿里云短信发送成功: {body.biz_id}")
+            else:
+                logger.warning(f"阿里云短信发送失败: code={body.code}, message={body.message}")
+            return body.code == "OK"
+        
+        elif sms_cfg.get("provider") == "custom" and sms_cfg.get("api_url"):
             data = {
                 "phone": ",".join(sms_cfg["phone_numbers"]),
                 "content": content,
-                "key": sms_cfg["api_key"]
+                "key": sms_cfg.get("api_key", "")
             }
             if sms_cfg.get("api_secret"):
                 data["secret"] = sms_cfg["api_secret"]
             encoded = urllib.parse.urlencode(data).encode()
             req = urllib.request.Request(sms_cfg["api_url"], data=encoded)
             urllib.request.urlopen(req, timeout=10)
-            logger.info(f"告警短信已发送至 {sms_cfg['phone_numbers']}")
+            logger.info(f"自定义短信已发送至 {sms_cfg['phone_numbers']}")
+            return True
+        
         return True
     except Exception as e:
         logger.error(f"发送短信失败: {e}")
