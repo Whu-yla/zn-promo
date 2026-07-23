@@ -173,6 +173,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
       </div>
       <div class="form-group"><label>接收手机号（多个用逗号分隔）</label><input id="smsPhones" placeholder="13800138000, 13900139000"></div>
       <div class="btn-group">
+        <button class="btn btn-success btn-sm" onclick="testSms()">📨 发送测试</button>
         <button class="btn btn-primary btn-sm" onclick="saveConfig()">💾 保存配置</button>
       </div>
     </div>
@@ -407,6 +408,43 @@ async function testEmail() {
     const result = await r.json();
     if (result.success) {
       flash('测试邮件发送成功 ✅', 'success');
+    } else {
+      flash('发送失败: ' + result.message, 'error');
+    }
+  } catch(e) {
+    flash('发送失败: ' + e.message, 'error');
+  }
+}
+
+async function testSms() {
+  const config = {
+    provider: document.getElementById('smsProvider').value,
+    api_url: document.getElementById('smsApiUrl').value,
+    api_key: document.getElementById('smsApiKey').value,
+    api_secret: document.getElementById('smsApiSecret').value,
+    aliyun_sign_name: document.getElementById('aliyunSignName').value,
+    aliyun_template_code: document.getElementById('aliyunTemplateCode').value,
+    phone_numbers: document.getElementById('smsPhones').value.split(',').map(s => s.trim()).filter(Boolean)
+  };
+
+  if (!config.phone_numbers.length) {
+    flash('请填写接收手机号', 'error');
+    return;
+  }
+  if (config.provider === 'aliyun' && (!config.api_key || !config.aliyun_sign_name || !config.aliyun_template_code)) {
+    flash('请填写完整的阿里云短信配置（AccessKey、签名、模板Code）', 'error');
+    return;
+  }
+
+  try {
+    const r = await fetch(API_BASE + '/test-sms', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(config)
+    });
+    const result = await r.json();
+    if (result.success) {
+      flash('测试短信发送成功 ✅', 'success');
     } else {
       flash('发送失败: ' + result.message, 'error');
     }

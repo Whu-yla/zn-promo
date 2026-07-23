@@ -583,6 +583,67 @@ async def test_email(config: dict):
     except Exception as e:
         return {"success": False, "message": f"发送失败: {str(e)}"}
 
+@app.post("/api/monitor/test-sms", summary="测试短信发送")
+async def test_sms(config: dict):
+    try:
+        from alibabacloud_dysmsapi20170525.client import Client as DysmsapiClient
+        from alibabacloud_dysmsapi20170525 import models as dysmsapi_models
+        from alibabacloud_tea_openapi import models as open_api_models
+        
+        provider = config.get("provider", "aliyun")
+        
+        if provider == "aliyun":
+            access_key_id = config.get("api_key", "")
+            access_key_secret = config.get("api_secret", "")
+            sign_name = config.get("aliyun_sign_name", "")
+            template_code = config.get("aliyun_template_code", "")
+            phone_numbers = config.get("phone_numbers", [])
+            
+            if not all([access_key_id, access_key_secret, sign_name, template_code]):
+                return {"success": False, "message": "阿里云短信配置不完整，请填写AccessKey、签名和模板Code"}
+            if not phone_numbers:
+                return {"success": False, "message": "请填写接收手机号"}
+            
+            api_config = open_api_models.Config(
+                access_key_id=access_key_id,
+                access_key_secret=access_key_secret
+            )
+            api_config.endpoint = 'dysmsapi.aliyuncs.com'
+            client = DysmsapiClient(api_config)
+            
+            template_param = json.dumps({"content": "【服务监控】这是一条测试短信，收到即表示短信配置正常。"}, ensure_ascii=False)
+            
+            request = dysmsapi_models.SendSmsRequest(
+                phone_numbers=",".join(phone_numbers),
+                sign_name=sign_name,
+                template_code=template_code,
+                template_param=template_param
+            )
+            response = client.send_sms(request)
+            body = response.body
+            if body.code == "OK":
+                return {"success": True, "message": f"测试短信发送成功，BizId: {body.biz_id}"}
+            else:
+                return {"success": False, "message": f"发送失败: {body.message} (code: {body.code})"}
+        
+        elif provider == "custom" and config.get("api_url"):
+            import urllib.parse, urllib.request
+            data = {
+                "phone": ",".join(config.get("phone_numbers", [])),
+                "content": "【服务监控】这是一条测试短信",
+                "key": config.get("api_key", "")
+            }
+            if config.get("api_secret"):
+                data["secret"] = config["api_secret"]
+            encoded = urllib.parse.urlencode(data).encode()
+            req = urllib.request.Request(config["api_url"], data=encoded)
+            urllib.request.urlopen(req, timeout=10)
+            return {"success": True, "message": "测试短信发送成功"}
+        
+        return {"success": False, "message": "未知的短信服务商"}
+    except Exception as e:
+        return {"success": False, "message": f"发送失败: {str(e)}"}
+
 @app.post("/api/monitor/trigger-check", summary="触发一次手动检查")
 async def trigger_check():
     import subprocess
