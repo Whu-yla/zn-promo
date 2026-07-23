@@ -611,7 +611,7 @@ async def test_sms(config: dict):
             api_config.endpoint = 'dysmsapi.aliyuncs.com'
             client = DysmsapiClient(api_config)
             
-            template_param = json.dumps({"content": "【服务监控】这是一条测试短信，收到即表示短信配置正常。"}, ensure_ascii=False)
+            template_param = json.dumps({"name": "【服务监控】这是一条测试短信，收到即表示短信配置正常。", "time": datetime.now().strftime("%m月%d日 %H:%M")}, ensure_ascii=False)
             
             request = dysmsapi_models.SendSmsRequest(
                 phone_numbers=",".join(phone_numbers),

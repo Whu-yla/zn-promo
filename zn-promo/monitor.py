@@ -269,7 +269,9 @@ def send_sms_alert(config, content):
             
             # Template param: pass the alert content as a variable
             import json as _json
-            template_param = _json.dumps({"content": content[:50]}, ensure_ascii=False)
+            from datetime import datetime as _dt
+            _now_str = _dt.now().strftime("%m月%d日 %H:%M")
+            template_param = _json.dumps({"name": content[:50], "time": _now_str}, ensure_ascii=False)
             
             request = dysmsapi_models.SendSmsRequest(
                 phone_numbers=",".join(sms_cfg["phone_numbers"]),
