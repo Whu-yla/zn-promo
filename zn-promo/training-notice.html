@@ -137,6 +137,83 @@ body {
 .desc-box p strong {
   color: #8ab4d6;
 }
+.meeting-box {
+  background: rgba(0, 180, 255, 0.03);
+  border: 1px solid rgba(0, 180, 255, 0.12);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+.meeting-header {
+  font-size: 14px;
+  color: #00b4ff;
+  font-weight: 600;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+.meeting-body {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.meeting-info {
+  flex: 1;
+}
+.meeting-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.meeting-row:last-child {
+  border-bottom: none;
+}
+.meeting-label {
+  font-size: 13px;
+  color: #5a7a9a;
+  width: 60px;
+  flex-shrink: 0;
+}
+.meeting-id {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffab40;
+  letter-spacing: 2px;
+  font-family: 'Courier New', monospace;
+}
+.meeting-link {
+  font-size: 14px;
+  color: #00b4ff;
+  text-decoration: none;
+  padding: 4px 12px;
+  border: 1px solid rgba(0, 180, 255, 0.3);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.meeting-link:hover {
+  background: rgba(0, 180, 255, 0.1);
+  border-color: #00b4ff;
+}
+.meeting-hint {
+  font-size: 12px;
+  color: #5a7a9a;
+}
+.meeting-qr {
+  flex-shrink: 0;
+}
+.meeting-qr img {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 180, 255, 0.15);
+  display: block;
+}
+@media (max-width: 500px) {
+  .meeting-body { flex-direction: column; align-items: stretch; }
+  .meeting-qr { text-align: center; }
+  .meeting-qr img { margin: 0 auto; }
+}
+
 .footer {
   text-align: center;
   padding-top: 20px;
@@ -200,6 +277,29 @@ body {
       从开发工具链到部署运维，从单机协作到云端协同，<strong>让 AI 成为你的项目合伙人</strong>。
       适合所有对 AI 赋能开发感兴趣的同事参加。
     </p>
+  </div>
+
+  <div class="meeting-box">
+    <div class="meeting-header">💻 腾讯会议</div>
+    <div class="meeting-body">
+      <div class="meeting-info">
+        <div class="meeting-row">
+          <span class="meeting-label">会议号</span>
+          <span class="meeting-id">712-791-104</span>
+        </div>
+        <div class="meeting-row">
+          <span class="meeting-label">链接</span>
+          <a href="https://meeting.tencent.com/dm/Xle8rh7XdljE" class="meeting-link" target="_blank">点击入会</a>
+        </div>
+        <div class="meeting-row">
+          <span class="meeting-label">二维码</span>
+          <span class="meeting-hint">扫描下方二维码入会</span>
+        </div>
+      </div>
+      <div class="meeting-qr">
+        <img src="/assets/training-qr.jpg" alt="培训二维码">
+      </div>
+    </div>
   </div>
 
   <div class="footer">
