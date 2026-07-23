@@ -324,7 +324,6 @@ async function loadConfig() {
     const sms = cfg.sms || {};
     document.getElementById('smsEnabled').checked = sms.enabled || false;
     document.getElementById('smsProvider').value = sms.provider || 'aliyun';
-    document.getElementById('smsApiUrl').value = sms.api_url || '';
     document.getElementById('smsApiKey').value = sms.api_key || '';
     document.getElementById('smsApiSecret').value = sms.api_secret || '';
     document.getElementById('aliyunSignName').value = sms.aliyun_sign_name || '';
@@ -353,7 +352,6 @@ async function saveConfig() {
     sms: {
       enabled: document.getElementById('smsEnabled').checked,
       provider: document.getElementById('smsProvider').value,
-      api_url: document.getElementById('smsApiUrl').value,
       api_key: document.getElementById('smsApiKey').value,
       api_secret: document.getElementById('smsApiSecret').value,
       aliyun_sign_name: document.getElementById('aliyunSignName').value,
@@ -419,7 +417,6 @@ async function testEmail() {
 async function testSms() {
   const config = {
     provider: document.getElementById('smsProvider').value,
-    api_url: document.getElementById('smsApiUrl').value,
     api_key: document.getElementById('smsApiKey').value,
     api_secret: document.getElementById('smsApiSecret').value,
     aliyun_sign_name: document.getElementById('aliyunSignName').value,
