@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>服务监控 · 数智科技</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+.container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+/* Header */
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+.header h1 { font-size: 22px; font-weight: 700; }
+.header h1 span { color: #3b82f6; }
+.header .update-time { font-size: 13px; color: #94a3b8; }
+.header .update-time .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.header .update-time .dot.green { background: #22c55e; }
+.header .update-time .dot.red { background: #ef4444; }
+
+/* Summary Cards */
+.summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.summary-card { background: #1e293b; border-radius: 12px; padding: 18px; text-align: center; border: 1px solid #334155; }
+.summary-card .num { font-size: 32px; font-weight: 700; }
+.summary-card .label { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+.summary-card.green .num { color: #22c55e; }
+.summary-card.red .num { color: #ef4444; }
+.summary-card.blue .num { color: #3b82f6; }
+
+/* Service Grid */
+.service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.service-card { background: #1e293b; border-radius: 10px; padding: 16px; border: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; }
+.service-card .info { flex: 1; }
+.service-card .name { font-size: 14px; font-weight: 600; }
+.service-card .detail { font-size: 12px; color: #94a3b8; margin-top: 3px; }
+.service-card .status-badge { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 600; flex-shrink: 0; }
+.service-card .status-badge.up { background: rgba(34,197,94,0.15); color: #22c55e; }
+.service-card .status-badge.down { background: rgba(239,68,68,0.15); color: #ef4444; }
+.service-card .status-icon { font-size: 20px; margin-right: 12px; flex-shrink: 0; }
+
+/* Config Panel */
+.config-panel { background: #1e293b; border-radius: 12px; border: 1px solid #334155; overflow: hidden; margin-bottom: 28px; }
+.config-panel .tab-bar { display: flex; border-bottom: 1px solid #334155; }
+.config-panel .tab-bar button { flex: 1; padding: 12px; background: none; border: none; color: #94a3b8; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+.config-panel .tab-bar button:hover { color: #e2e8f0; background: #1a2538; }
+.config-panel .tab-bar button.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; background: #1a2538; }
+.config-panel .tab-content { padding: 20px; display: none; }
+.config-panel .tab-content.active { display: block; }
+
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 5px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 9px 12px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #e2e8f0; font-size: 13px; outline: none; }
+.form-group input:focus, .form-group select:focus { border-color: #3b82f6; }
+.form-group .hint { font-size: 11px; color: #64748b; margin-top: 3px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.btn { padding: 8px 20px; border-radius: 6px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: #3b82f6; color: #fff; }
+.btn-primary:hover { background: #2563eb; }
+.btn-success { background: #22c55e; color: #fff; }
+.btn-success:hover { background: #16a34a; }
+.btn-outline { background: none; border: 1px solid #334155; color: #94a3b8; }
+.btn-outline:hover { border-color: #3b82f6; color: #e2e8f0; }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+.btn-group { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+
+/* Switch */
+.switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .slider { position: absolute; cursor: pointer; inset: 0; background: #334155; border-radius: 22px; transition: 0.3s; }
+.switch .slider:before { content: ""; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.3s; }
+.switch input:checked + .slider { background: #22c55e; }
+.switch input:checked + .slider:before { transform: translateX(18px); }
+.switch-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+
+/* History */
+.history { background: #1e293b; border-radius: 12px; border: 1px solid #334155; overflow: hidden; }
+.history-title { padding: 16px 20px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #334155; }
+.history-item { padding: 10px 20px; border-bottom: 1px solid #1a2538; display: flex; justify-content: space-between; align-items: center; }
+.history-item:last-child { border: none; }
+.history-item .msg { font-size: 13px; }
+.history-item .time { font-size: 11px; color: #64748b; }
+.history-item .tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-right: 8px; }
+.history-item .tag.alert { background: rgba(239,68,68,0.15); color: #ef4444; }
+.history-item .tag.recovery { background: rgba(34,197,94,0.15); color: #22c55e; }
+.history-empty { padding: 30px; text-align: center; color: #64748b; font-size: 13px; }
+
+/* Flash message */
+.flash { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; font-size: 13px; z-index: 999; animation: slideIn 0.3s ease; }
+.flash.success { background: #22c55e; color: #fff; }
+.flash.error { background: #ef4444; color: #fff; }
+@keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+@media (max-width: 640px) {
+  .summary { grid-template-columns: repeat(2, 1fr); }
+  .service-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🖥️ <span>服务监控</span> 面板</h1>
+    <div class="update-time" id="updateTime">
+      <span class="dot green" id="statusDot"></span>
+      <span id="updateText">加载中...</span>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary" id="summary">
+    <div class="summary-card blue"><div class="num" id="totalNum">-</div><div class="label">总服务数</div></div>
+    <div class="summary-card green"><div class="num" id="upNum">-</div><div class="label">运行正常</div></div>
+    <div class="summary-card red"><div class="num" id="downNum">-</div><div class="label">服务异常</div></div>
+    <div class="summary-card blue"><div class="num" id="alertNum">-</div><div class="label">今日告警</div></div>
+  </div>
+
+  <!-- Service Status -->
+  <div class="service-grid" id="serviceGrid"></div>
+
+  <!-- Config Panel -->
+  <div class="config-panel">
+    <div class="tab-bar">
+      <button class="active" onclick="switchTab('email')">📧 邮件告警</button>
+      <button onclick="switchTab('sms')">📱 短信告警</button>
+      <button onclick="switchTab('global')">⚙️ 全局设置</button>
+    </div>
+
+    <!-- Email Config -->
+    <div class="tab-content active" id="tab-email">
+      <div class="switch-row">
+        <span style="font-size:13px;">启用邮件告警</span>
+        <label class="switch"><input type="checkbox" id="emailEnabled" onchange="toggleFieldset('email')"><span class="slider"></span></label>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>SMTP 服务器</label><input id="smtpHost" placeholder="smtp.qq.com"></div>
+        <div class="form-group"><label>端口</label><input id="smtpPort" placeholder="465"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>用户名（邮箱地址）</label><input id="emailUser" placeholder="you@qq.com"></div>
+        <div class="form-group"><label>密码/授权码</label><input id="emailPass" type="password" placeholder="授权码"></div>
+      </div>
+      <div class="form-group"><label>发件人地址</label><input id="fromAddr" placeholder="you@qq.com"></div>
+      <div class="form-group"><label>收件人（多个用逗号分隔）</label><input id="toAddrs" placeholder="admin@csepdi.com, manager@csepdi.com"></div>
+      <div class="btn-group">
+        <button class="btn btn-outline btn-sm" onclick="testEmail()">📨 发送测试</button>
+        <button class="btn btn-primary btn-sm" onclick="saveConfig()">💾 保存配置</button>
+      </div>
+    </div>
+
+    <!-- SMS Config -->
+    <div class="tab-content" id="tab-sms">
+      <div class="switch-row">
+        <span style="font-size:13px;">启用短信告警</span>
+        <label class="switch"><input type="checkbox" id="smsEnabled" onchange="toggleFieldset('sms')"><span class="slider"></span></label>
+      </div>
+      <div class="form-group">
+        <label>短信服务商</label>
+        <select id="smsProvider">
+          <option value="aliyun">阿里云短信</option>
+          <option value="tencent">腾讯云短信</option>
+          <option value="custom">自定义 HTTP API</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>API 地址</label><input id="smsApiUrl" placeholder="https://api.sms.com/send"></div>
+        <div class="form-group"><label>API Key</label><input id="smsApiKey" placeholder="app_key"></div>
+      </div>
+      <div class="form-group">
+        <label>API Secret</label>
+        <input id="smsApiSecret" type="password" placeholder="app_secret">
+        <div class="hint">使用阿里云/腾讯云时需填写</div>
+      </div>
+      <div class="form-group"><label>接收手机号（多个用逗号分隔）</label><input id="smsPhones" placeholder="13800138000, 13900139000"></div>
+      <div class="btn-group">
+        <button class="btn btn-primary btn-sm" onclick="saveConfig()">💾 保存配置</button>
+      </div>
+    </div>
+
+    <!-- Global Config -->
+    <div class="tab-content" id="tab-global">
+      <div class="form-row">
+        <div class="form-group">
+          <label>检查间隔（秒）</label>
+          <input id="checkInterval" type="number" placeholder="30">
+          <div class="hint">建议 30~60 秒</div>
+        </div>
+        <div class="form-group">
+          <label>告警冷却时间（秒）</label>
+          <input id="alertCooldown" type="number" placeholder="300">
+          <div class="hint">同一服务两次告警的最小间隔，建议 300 秒</div>
+        </div>
+      </div>
+      <div class="btn-group" style="margin-top:4px;">
+        <button class="btn btn-outline btn-sm" onclick="triggerCheck()">🔄 立即检查</button>
+        <button class="btn btn-primary btn-sm" onclick="saveConfig()">💾 保存配置</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div class="history">
+    <div class="history-title">📋 告警历史</div>
+    <div id="historyList"></div>
+  </div>
+</div>
+
+<script>
+const API_BASE = '/api/monitor';
+let refreshTimer = null;
+
+function flash(msg, type) {
+  const div = document.createElement('div');
+  div.className = 'flash ' + type;
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function toggleFieldset(type) {
+  // Just visual feedback, no disabled fields needed
+}
+
+async function loadStatus() {
+  try {
+    const r = await fetch(API_BASE + '/status');
+    const data = await r.json();
+    renderStatus(data);
+  } catch(e) {
+    document.getElementById('updateText').textContent = '获取失败';
+  }
+}
+
+function renderStatus(data) {
+  const services = data.services || {};
+  const summary = data.summary || { total: 0, up: 0, down: 0 };
+  const history = data.history || [];
+
+  // Summary
+  document.getElementById('totalNum').textContent = summary.total || '-';
+  document.getElementById('upNum').textContent = summary.up || '-';
+  document.getElementById('downNum').textContent = summary.down || '-';
+  const todayAlerts = history.filter(h => {
+    if (!h.time) return false;
+    return h.time.startsWith(new Date().toISOString().slice(0, 10)) && h.type === 'alert';
+  });
+  document.getElementById('alertNum').textContent = todayAlerts.length;
+
+  // Update time
+  if (data.last_updated) {
+    document.getElementById('updateText').textContent = '最后更新: ' + data.last_updated;
+    const dot = document.getElementById('statusDot');
+    dot.className = 'dot ' + (summary.down > 0 ? 'red' : 'green');
+  }
+
+  // Service cards
+  const grid = document.getElementById('serviceGrid');
+  grid.innerHTML = '';
+  Object.values(services).forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'service-card';
+    card.innerHTML = `
+      <div class="status-icon">${s.status === 'up' ? '✅' : '❌'}</div>
+      <div class="info">
+        <div class="name">${s.name}</div>
+        <div class="detail">${s.detail} · ${s.checked_at || ''}</div>
+      </div>
+      <div class="status-badge ${s.status}">${s.status === 'up' ? '正常' : '异常'}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // History
+  const list = document.getElementById('historyList');
+  list.innerHTML = '';
+  if (history.length === 0) {
+    list.innerHTML = '<div class="history-empty">暂无告警记录</div>';
+  } else {
+    const recent = history.slice(-50).reverse();
+    recent.forEach(h => {
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      div.innerHTML = `
+        <div>
+          <span class="tag ${h.type}">${h.type === 'alert' ? '告警' : '恢复'}</span>
+          <span class="msg">${h.message}</span>
+        </div>
+        <span class="time">${h.time || ''}</span>
+      `;
+      list.appendChild(div);
+    });
+  }
+}
+
+async function loadConfig() {
+  try {
+    const r = await fetch(API_BASE + '/config');
+    const cfg = await r.json();
+    if (!cfg || Object.keys(cfg).length === 0) return;
+
+    // Email
+    const email = cfg.email || {};
+    document.getElementById('emailEnabled').checked = email.enabled || false;
+    document.getElementById('smtpHost').value = email.smtp_host || '';
+    document.getElementById('smtpPort').value = email.smtp_port || '';
+    document.getElementById('emailUser').value = email.username || '';
+    document.getElementById('emailPass').value = email.password || '';
+    document.getElementById('fromAddr').value = email.from_addr || '';
+    document.getElementById('toAddrs').value = (email.to_addrs || []).join(', ');
+
+    // SMS
+    const sms = cfg.sms || {};
+    document.getElementById('smsEnabled').checked = sms.enabled || false;
+    document.getElementById('smsProvider').value = sms.provider || 'aliyun';
+    document.getElementById('smsApiUrl').value = sms.api_url || '';
+    document.getElementById('smsApiKey').value = sms.api_key || '';
+    document.getElementById('smsApiSecret').value = sms.api_secret || '';
+    document.getElementById('smsPhones').value = (sms.phone_numbers || []).join(', ');
+
+    // Global
+    const g = cfg.global || {};
+    document.getElementById('checkInterval').value = g.check_interval || 30;
+    document.getElementById('alertCooldown').value = g.alert_cooldown || 300;
+  } catch(e) {}
+}
+
+async function saveConfig() {
+  const config = {
+    email: {
+      enabled: document.getElementById('emailEnabled').checked,
+      smtp_host: document.getElementById('smtpHost').value,
+      smtp_port: parseInt(document.getElementById('smtpPort').value) || 465,
+      smtp_ssl: true,
+      username: document.getElementById('emailUser').value,
+      password: document.getElementById('emailPass').value,
+      from_addr: document.getElementById('fromAddr').value,
+      to_addrs: document.getElementById('toAddrs').value.split(',').map(s => s.trim()).filter(Boolean)
+    },
+    sms: {
+      enabled: document.getElementById('smsEnabled').checked,
+      provider: document.getElementById('smsProvider').value,
+      api_url: document.getElementById('smsApiUrl').value,
+      api_key: document.getElementById('smsApiKey').value,
+      api_secret: document.getElementById('smsApiSecret').value,
+      phone_numbers: document.getElementById('smsPhones').value.split(',').map(s => s.trim()).filter(Boolean)
+    },
+    global: {
+      check_interval: parseInt(document.getElementById('checkInterval').value) || 30,
+      alert_cooldown: parseInt(document.getElementById('alertCooldown').value) || 300
+    }
+  };
+
+  try {
+    const r = await fetch(API_BASE + '/config', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(config)
+    });
+    const result = await r.json();
+    if (result.success) {
+      flash('配置已保存 ✅', 'success');
+    } else {
+      flash('保存失败: ' + (result.message || ''), 'error');
+    }
+  } catch(e) {
+    flash('保存失败: ' + e.message, 'error');
+  }
+}
+
+async function testEmail() {
+  const config = {
+    smtp_host: document.getElementById('smtpHost').value,
+    smtp_port: parseInt(document.getElementById('smtpPort').value) || 465,
+    smtp_ssl: true,
+    username: document.getElementById('emailUser').value,
+    password: document.getElementById('emailPass').value,
+    from_addr: document.getElementById('fromAddr').value,
+    to_addrs: document.getElementById('toAddrs').value.split(',').map(s => s.trim()).filter(Boolean)
+  };
+
+  if (!config.smtp_host || !config.username || !config.password || !config.to_addrs.length) {
+    flash('请先填写完整的邮件配置', 'error');
+    return;
+  }
+
+  try {
+    const r = await fetch(API_BASE + '/test-email', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(config)
+    });
+    const result = await r.json();
+    if (result.success) {
+      flash('测试邮件发送成功 ✅', 'success');
+    } else {
+      flash('发送失败: ' + result.message, 'error');
+    }
+  } catch(e) {
+    flash('发送失败: ' + e.message, 'error');
+  }
+}
+
+async function triggerCheck() {
+  try {
+    const r = await fetch(API_BASE + '/trigger-check', { method: 'POST' });
+    const result = await r.json();
+    if (result.success) {
+      flash('检查完成 ✅', 'success');
+      loadStatus();
+    } else {
+      flash('检查失败: ' + (result.message || ''), 'error');
+    }
+  } catch(e) {
+    flash('检查失败: ' + e.message, 'error');
+  }
+}
+
+// Auto refresh
+function startAutoRefresh() {
+  loadStatus();
+  loadConfig();
+  if (refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(loadStatus, 30000);
+}
+
+startAutoRefresh();
+</script>
+</body>
+</html>

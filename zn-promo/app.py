@@ -11,6 +11,7 @@ import sqlite3
 import os
 import csv
 import io
+import json
 import logging
 
 logging.basicConfig(
@@ -532,6 +533,65 @@ async def get_logs(
         } for row in rows]
     finally:
         conn.close()
+
+# ==================== 服务监控 API ====================
+MONITOR_STATUS_FILE = os.path.join(os.path.dirname(__file__), "monitor_status.json")
+MONITOR_CONFIG_FILE = os.path.join(os.path.dirname(__file__), "monitor_config.json")
+
+@app.get("/api/monitor/status", summary="获取服务监控状态")
+async def get_monitor_status():
+    try:
+        with open(MONITOR_STATUS_FILE) as f:
+            return json.load(f)
+    except:
+        return {"services": {}, "last_updated": "", "summary": {"total": 0, "up": 0, "down": 0}, "history": []}
+
+@app.get("/api/monitor/config", summary="获取告警配置")
+async def get_monitor_config():
+    try:
+        with open(MONITOR_CONFIG_FILE) as f:
+            return json.load(f)
+    except:
+        return {}
+
+@app.post("/api/monitor/config", summary="保存告警配置")
+async def save_monitor_config(config: dict):
+    with open(MONITOR_CONFIG_FILE, 'w') as f:
+        json.dump(config, f, ensure_ascii=False, indent=2)
+    return {"success": True, "message": "配置已保存"}
+
+@app.post("/api/monitor/test-email", summary="测试邮件发送")
+async def test_email(config: dict):
+    try:
+        from email.mime.text import MIMEText
+        import smtplib
+        msg = MIMEText("这是一封来自服务监控系统的测试邮件，收到即表示邮件配置正常。", "plain", "utf-8")
+        msg["Subject"] = "[服务监控] 测试邮件"
+        msg["From"] = config.get("from_addr", "")
+        msg["To"] = ", ".join(config.get("to_addrs", []))
+        
+        if config.get("smtp_ssl"):
+            with smtplib.SMTP_SSL(config["smtp_host"], config["smtp_port"]) as server:
+                server.login(config["username"], config["password"])
+                server.send_message(msg)
+        else:
+            with smtplib.SMTP(config["smtp_host"], config["smtp_port"]) as server:
+                server.starttls()
+                server.login(config["username"], config["password"])
+                server.send_message(msg)
+        return {"success": True, "message": "测试邮件发送成功"}
+    except Exception as e:
+        return {"success": False, "message": f"发送失败: {str(e)}"}
+
+@app.post("/api/monitor/trigger-check", summary="触发一次手动检查")
+async def trigger_check():
+    import subprocess
+    try:
+        r = subprocess.run(["python3", os.path.join(os.path.dirname(__file__), "monitor.py"), "--once"],
+                          capture_output=True, text=True, timeout=30)
+        return {"success": True, "output": r.stdout}
+    except Exception as e:
+        return {"success": False, "message": str(e)}
 
 if __name__ == "__main__":
     import uvicorn
