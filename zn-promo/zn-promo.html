@@ -658,15 +658,15 @@
       scroll-snap-align: start;
       scroll-snap-stop: always;
       -webkit-overflow-scrolling: touch;
-      padding-top: 80px;
-      padding-bottom: 24px;
+      padding-top: 76px;
+      padding-bottom: 16px;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
-    body > header.hero { padding-top: 84px; justify-content: center; }
+    body > header.hero { padding-top: 80px; justify-content: center; }
     .hero { min-height: 0; }
-    /* 内容容器撑满并垂直居中 */
+    /* 内容容器撑满并垂直居中；内容超高时内部竖向滚动兜底（隐藏滚动条），safe center 避免顶部裁切 */
     body > header.hero > .container,
     body > section > .container {
       width: 100%;
@@ -675,13 +675,51 @@
       padding: 0 24px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: safe center;
       flex: 1 1 auto;
       min-height: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
+    body > header.hero > .container::-webkit-scrollbar,
+    body > section > .container::-webkit-scrollbar { display: none; }
     /* 横向滚动条隐藏，保持沉浸感 */
     body::-webkit-scrollbar { display: none; }
     body { scrollbar-width: none; -ms-overflow-style: none; }
+
+    /* ============ 高度自适应：针对不同屏幕高度精简间距，避免内容溢出/缩放 ============ */
+    @media (max-height: 900px) {
+      body > header.hero, body > section { padding-top: 72px; padding-bottom: 12px; }
+      .section-head { margin-bottom: 28px; }
+      .section-title { font-size: 30px; }
+      .section-desc { font-size: 14px; }
+      .product-tabs { margin-bottom: 24px; }
+    }
+    @media (max-height: 760px) {
+      body > header.hero, body > section { padding-top: 68px; padding-bottom: 8px; }
+      section { padding: 0; }
+      .section-head { margin-bottom: 16px; }
+      .section-eyebrow { margin-bottom: 6px; font-size: 11px; }
+      .section-title { font-size: 24px; margin-bottom: 6px; }
+      .section-desc { font-size: 12.5px; line-height: 1.55; }
+      .platform-grid { gap: 10px 14px; }
+      .platform-body { padding: 9px 13px 11px; }
+      .platform-title { font-size: 14px; margin-bottom: 4px; }
+      .platform-desc { font-size: 11.5px; line-height: 1.5; }
+      .platform-features { margin-top: 7px; gap: 5px; }
+      .product-grid { gap: 12px; }
+      .product-body { padding: 9px 13px 11px; }
+      .product-name { font-size: 13.5px; margin-bottom: 5px; }
+      .product-desc { font-size: 11.5px; line-height: 1.5; }
+      .product-specs { margin-top: 8px; gap: 4px; }
+      .software-list { gap: 7px 12px; }
+      .software-item { padding: 7px 12px; }
+      .software-item .sw-name { font-size: 13px; }
+      .software-item .sw-desc { font-size: 11px; line-height: 1.45; }
+      .product-tabs { margin-bottom: 16px; gap: 8px; }
+      .product-tab { padding: 9px 20px; font-size: 13px; }
+    }
   </style>
 </head>
 <body id="top">
@@ -1383,47 +1421,10 @@
   // 页面初始：先等 5 分钟再开始
   autoTimer = setTimeout(startAutoPlay, AUTO_DELAY);
 
-  // ===== 每页内容自适应缩放至一屏（PPT 效果）=====
-  function fitPagesToScreen() {
-    const pages = document.querySelectorAll('body > header.hero, body > section');
-    pages.forEach(function(page) {
-      const container = page.querySelector(':scope > .container');
-      if (!container) return;
-      // 先重置，确保测量到真实内容高度
-      container.style.transform = 'none';
-      container.style.height = '';
-      container.style.flexShrink = '';
-      const pageH = page.clientHeight;
-      const contentH = container.scrollHeight;
-      if (contentH > pageH - 4) {
-        // 内容超出一屏：等比缩放，并把布局盒高度同步为缩放后高度，避免溢出裁切
-        const scale = Math.max(0.5, (pageH - 8) / contentH);
-        container.style.transform = 'scale(' + scale + ')';
-        container.style.transformOrigin = 'top center';
-        container.style.height = (contentH * scale) + 'px';
-        container.style.flexShrink = '0';
-      }
-    });
-  }
-  window.addEventListener('load', function() {
-    setTimeout(fitPagesToScreen, 300);
-    // 图片加载完成后可能改变高度，再校准一次
-    setTimeout(fitPagesToScreen, 1200);
-  });
-  window.addEventListener('resize', fitPagesToScreen);
-  // 横向翻页到达新页面时重新计算（解决首屏需点击才正常的问题）
-  let fitScrollDebounce = null;
-  document.body.addEventListener('scroll', function() {
-    if (fitScrollDebounce) clearTimeout(fitScrollDebounce);
-    fitScrollDebounce = setTimeout(fitPagesToScreen, 220);
-  }, { passive: true });
-  // 切换产品 tab 后重新计算（两次：即时 + 动画结束后）
-  document.querySelectorAll('.product-tab').forEach(function(tab) {
-    tab.addEventListener('click', function() {
-      setTimeout(fitPagesToScreen, 120);
-      setTimeout(fitPagesToScreen, 450);
-    });
-  });
+  // ===== 内容自适应：已改用 CSS @media (max-height) 响应式适配，无需 JS 等比缩放 =====
+  // 原先的 transform:scale() 等比缩放会导致宽屏两侧大片空白 + 文字模糊，已移除。
+  // 现由 CSS 针对不同屏幕高度精简 padding/字号/间距；内容超高时由 .container 的
+  // overflow-y:auto 兜底滚动（滚动条隐藏），既不裁切也不留空白。
 </script>
 
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="返回顶部">↑</button>
