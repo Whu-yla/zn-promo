@@ -689,37 +689,19 @@
     body { scrollbar-width: none; -ms-overflow-style: none; }
 
     /* ============ 高度自适应：针对不同屏幕高度精简间距，避免内容溢出/缩放 ============ */
-    /* 高分屏（2K/4K，高度≥1200px）：放大字号与间距，让大屏不空旷 */
+    /* 高分屏（2K/4K，高度≥1200px）：仅放大标题区与 hero，卡片内部保持默认尺寸避免溢出 */
     @media (min-height: 1200px) {
       :root { --max-width: 1440px; }
-      body > header.hero, body > section { padding-top: 96px; padding-bottom: 32px; }
-      .section-head { margin-bottom: 64px; }
-      .section-eyebrow { font-size: 14px; margin-bottom: 16px; }
-      .section-title { font-size: 52px; }
-      .section-desc { font-size: 18px; }
-      .hero h1 { font-size: 72px; }
+      body > header.hero, body > section { padding-top: 88px; padding-bottom: 24px; }
+      .section-head { margin-bottom: 44px; }
+      .section-eyebrow { font-size: 14px; margin-bottom: 14px; }
+      .section-title { font-size: 46px; }
+      .section-desc { font-size: 17px; }
+      .hero h1 { font-size: 68px; }
       .hero-sub { font-size: 20px; max-width: 820px; }
       .hero-stat .num { font-size: 40px; }
       .hero-stat .label { font-size: 15px; }
-      .platform-grid { gap: 28px 32px; }
-      .platform-body { padding: 22px 28px 24px; }
-      .platform-title { font-size: 22px; margin-bottom: 12px; }
-      .platform-desc { font-size: 16px; line-height: 1.8; }
-      .platform-features { margin-top: 16px; gap: 10px; }
-      .platform-features span { font-size: 14px; padding: 6px 14px; }
-      .product-grid { gap: 28px; }
-      .product-body { padding: 20px 24px 22px; }
-      .product-name { font-size: 19px; margin-bottom: 12px; }
-      .product-desc { font-size: 15px; line-height: 1.8; }
-      .product-specs { margin-top: 16px; gap: 10px; }
-      .product-spec { font-size: 14px; }
-      .software-list { gap: 14px 22px; }
-      .software-item { padding: 16px 22px; }
-      .software-item .sw-num { font-size: 20px; min-width: 34px; }
-      .software-item .sw-name { font-size: 17px; }
-      .software-item .sw-desc { font-size: 14px; line-height: 1.7; }
-      .product-tabs { margin-bottom: 44px; gap: 16px; }
-      .product-tab { padding: 14px 36px; font-size: 16px; }
+      .product-tabs { margin-bottom: 36px; }
     }
     @media (max-height: 900px) {
       body > header.hero, body > section { padding-top: 72px; padding-bottom: 12px; }
