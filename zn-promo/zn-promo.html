@@ -689,6 +689,38 @@
     body { scrollbar-width: none; -ms-overflow-style: none; }
 
     /* ============ 高度自适应：针对不同屏幕高度精简间距，避免内容溢出/缩放 ============ */
+    /* 高分屏（2K/4K，高度≥1200px）：放大字号与间距，让大屏不空旷 */
+    @media (min-height: 1200px) {
+      :root { --max-width: 1440px; }
+      body > header.hero, body > section { padding-top: 96px; padding-bottom: 32px; }
+      .section-head { margin-bottom: 64px; }
+      .section-eyebrow { font-size: 14px; margin-bottom: 16px; }
+      .section-title { font-size: 52px; }
+      .section-desc { font-size: 18px; }
+      .hero h1 { font-size: 72px; }
+      .hero-sub { font-size: 20px; max-width: 820px; }
+      .hero-stat .num { font-size: 40px; }
+      .hero-stat .label { font-size: 15px; }
+      .platform-grid { gap: 28px 32px; }
+      .platform-body { padding: 22px 28px 24px; }
+      .platform-title { font-size: 22px; margin-bottom: 12px; }
+      .platform-desc { font-size: 16px; line-height: 1.8; }
+      .platform-features { margin-top: 16px; gap: 10px; }
+      .platform-features span { font-size: 14px; padding: 6px 14px; }
+      .product-grid { gap: 28px; }
+      .product-body { padding: 20px 24px 22px; }
+      .product-name { font-size: 19px; margin-bottom: 12px; }
+      .product-desc { font-size: 15px; line-height: 1.8; }
+      .product-specs { margin-top: 16px; gap: 10px; }
+      .product-spec { font-size: 14px; }
+      .software-list { gap: 14px 22px; }
+      .software-item { padding: 16px 22px; }
+      .software-item .sw-num { font-size: 20px; min-width: 34px; }
+      .software-item .sw-name { font-size: 17px; }
+      .software-item .sw-desc { font-size: 14px; line-height: 1.7; }
+      .product-tabs { margin-bottom: 44px; gap: 16px; }
+      .product-tab { padding: 14px 36px; font-size: 16px; }
+    }
     @media (max-height: 900px) {
       body > header.hero, body > section { padding-top: 72px; padding-bottom: 12px; }
       .section-head { margin-bottom: 28px; }
@@ -1303,12 +1335,24 @@
 
 <script>
   // 产品系列 Tab 切换
+  // 抖动根因：button 在 mousedown 时默认获焦，浏览器会把获焦元素 scrollIntoView，
+  // 而本页 body 是横向 scroll-snap 容器，导致页面被强制对齐滚动 = 画面抖动。
+  // 修复：mousedown 阻止默认行为（不获焦），click 阻止冒泡（不触发全局翻页）。
   document.querySelectorAll('.product-tab').forEach(tab => {
-    tab.addEventListener('click', function() {
+    tab.addEventListener('mousedown', function(e) {
+      e.preventDefault(); // 阻止 button 获焦，避免后续 scrollIntoView 抖动
+    });
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const savedLeft = document.body.scrollLeft;
       document.querySelectorAll('.product-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.product-panel').forEach(p => p.classList.remove('active'));
       this.classList.add('active');
       document.querySelector(`.product-panel[data-ppanel="${this.dataset.ptab}"]`).classList.add('active');
+      // 恢复横向位置，防止内容高度变化触发 scroll-snap 重新对齐
+      document.body.scrollLeft = savedLeft;
+      this.blur();
     });
   });
 
