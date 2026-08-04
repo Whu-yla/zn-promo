@@ -585,6 +585,51 @@
     @media (min-width: 768px) {
       .back-to-top { bottom: 32px; right: 32px; width: 48px; height: 48px; font-size: 20px; }
     }
+
+    /* ============ 移动端横向分屏滑动 ============ */
+    @media (max-width: 767px) {
+      html, body {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+      }
+      body {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+      }
+      /* 每个主区块各占一屏，内部允许竖向滚动 */
+      body > header.hero,
+      body > section,
+      body > .contact-bar,
+      body > footer {
+        flex: 0 0 100vw;
+        width: 100vw;
+        min-width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        -webkit-overflow-scrolling: touch;
+        padding-top: 76px;
+      }
+      body > header.hero { padding-top: 84px; }
+      .hero { min-height: 0; }
+      /* footer 内容少，垂直居中 */
+      body > footer {
+        display: flex; flex-direction: column; justify-content: center;
+      }
+      /* 滚动条隐藏，保持沉浸感 */
+      body::-webkit-scrollbar { display: none; }
+      body { scrollbar-width: none; -ms-overflow-style: none; }
+    }
   </style>
 </head>
 <body id="top">
@@ -1488,20 +1533,29 @@
     });
   });
 
-  window.addEventListener('scroll', function() {
+  function isMobileHorizontal() {
+    return window.matchMedia('(max-width: 767px)').matches;
+  }
+
+  function handleScroll() {
     const nav = document.getElementById('topnav');
     const backBtn = document.getElementById('backToTop');
-    if (window.scrollY > 50) {
+    // 移动端：横向滚动距离；桌面端：竖向滚动距离
+    const pos = isMobileHorizontal() ? document.body.scrollLeft : window.scrollY;
+    if (pos > 50) {
       nav.classList.add('scrolled');
     } else {
       nav.classList.remove('scrolled');
     }
-    if (window.scrollY > 300) {
+    if (pos > 300) {
       backBtn.classList.add('show');
     } else {
       backBtn.classList.remove('show');
     }
-  });
+  }
+  window.addEventListener('scroll', handleScroll);
+  // 移动端 body 自身横向滚动
+  document.body.addEventListener('scroll', handleScroll);
 
   // 移动端菜单
   function toggleMobileMenu() {
@@ -1515,9 +1569,13 @@
     document.body.style.overflow = '';
   }
 
-  // 返回顶部
+  // 返回顶部（移动端=回到首屏）
   function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isMobileHorizontal()) {
+      document.body.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 </script>
 
