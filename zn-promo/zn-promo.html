@@ -281,9 +281,8 @@
       position: relative;
     }
 
-    .platform-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
-    @media (min-width: 640px) { .platform-grid { grid-template-columns: 1fr 1fr; } }
-    @media (min-width: 1024px) { .platform-grid { grid-template-columns: 1fr 1fr; } }
+    .platform-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 768px) { .platform-grid { grid-template-columns: 1fr 1fr; gap: 22px 26px; } }
     .platform-card {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid rgba(34, 211, 238, 0.2);
@@ -303,31 +302,31 @@
       box-shadow: 0 20px 50px rgba(34, 211, 238, 0.2);
     }
     .platform-card:hover::before { opacity: 1; }
-    .platform-img { aspect-ratio: 16/9; overflow: hidden; background: #0f172a; position: relative; }
+    .platform-img { aspect-ratio: 21/9; overflow: hidden; background: #0f172a; position: relative; }
     .platform-img::after {
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(3, 7, 18, 0.8), transparent);
     }
     .platform-img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.5s ease; }
     .platform-card:hover .platform-img img { transform: scale(1.08); }
-    .platform-body { padding: 24px; }
+    .platform-body { padding: 14px 18px 16px; }
     .platform-tag {
-      display: inline-block; font-size: 11px; font-weight: 700;
+      display: inline-block; font-size: 10px; font-weight: 700;
       color: var(--accent-cyan); background: rgba(34, 211, 238, 0.1);
-      padding: 4px 12px; border-radius: 4px; margin-bottom: 12px;
+      padding: 3px 10px; border-radius: 4px; margin-bottom: 8px;
     }
     .platform-title {
-      font-family: var(--font-display); font-size: 18px; font-weight: 800; margin-bottom: 10px;
+      font-family: var(--font-display); font-size: 16px; font-weight: 800; margin-bottom: 6px;
       background: linear-gradient(135deg, #fff, var(--text-secondary));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .platform-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.75; }
-    .platform-features { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .platform-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
+    .platform-features { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
     .platform-features span {
-      font-size: 12px; color: var(--text-muted);
+      font-size: 11px; color: var(--text-muted);
       background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      padding: 5px 12px; border-radius: 4px;
+      padding: 3px 9px; border-radius: 4px;
     }
     .platform-card:hover .platform-features span {
       background: rgba(34, 211, 238, 0.1);
@@ -375,9 +374,9 @@
       padding: 5px 12px; border-radius: 6px; font-family: var(--font-display);
     }
     .product-group-head h3 { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: #fff; }
-    .product-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 48px; }
-    @media (min-width: 768px) { .product-grid { grid-template-columns: 1fr 1fr; } }
-    @media (min-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+    .product-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px; }
+    @media (min-width: 768px) { .product-grid { grid-template-columns: 1fr 1fr; gap: 18px; } }
+    @media (min-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
     .product-card {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid rgba(34, 211, 238, 0.2);
@@ -389,14 +388,14 @@
       border-color: var(--accent-cyan);
       box-shadow: 0 15px 40px rgba(34, 211, 238, 0.15);
     }
-    .product-img { aspect-ratio: 4/3; overflow: hidden; background: #0f172a; position: relative; }
+    .product-img { aspect-ratio: 16/10; overflow: hidden; background: #0f172a; position: relative; }
     .product-img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
     .product-img .type-badge {
-      position: absolute; top: 14px; right: 14px;
+      position: absolute; top: 12px; right: 12px;
       background: rgba(3, 7, 18, 0.9);
       border: 1px solid rgba(34, 211, 238, 0.3);
       color: var(--accent-cyan);
-      font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 6px;
+      font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 6px;
       backdrop-filter: blur(10px);
     }
     .product-img .type-badge.hw {
@@ -404,12 +403,57 @@
       border-color: rgba(251, 191, 36, 0.4);
       color: var(--accent-gold);
     }
-    .product-body { padding: 24px; }
-    .product-name { font-family: var(--font-display); font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 10px; }
-    .product-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.75; }
-    .product-specs { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
-    .product-spec { font-size: 13px; color: var(--text-muted); display: flex; gap: 10px; }
+    .product-body { padding: 14px 16px 16px; }
+    .product-name { font-family: var(--font-display); font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 8px; line-height: 1.35; }
+    .product-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
+    .product-specs { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+    .product-spec { font-size: 12px; color: var(--text-muted); display: flex; gap: 8px; line-height: 1.5; }
     .product-spec .key { font-weight: 600; color: var(--accent-cyan); white-space: nowrap; }
+
+    /* 文鳐软件 · 优雅列表视图 */
+    .software-list {
+      display: grid; grid-template-columns: 1fr; gap: 10px;
+      margin-bottom: 16px;
+    }
+    @media (min-width: 768px) { .software-list { grid-template-columns: 1fr 1fr; gap: 12px 16px; } }
+    .software-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(34, 211, 238, 0.15);
+      border-radius: 12px; padding: 12px 16px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    .software-item:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(34, 211, 238, 0.06);
+      transform: translateX(4px);
+      box-shadow: 0 8px 24px rgba(34, 211, 238, 0.12);
+    }
+    .software-item .sw-num {
+      font-family: var(--font-display); font-size: 16px; font-weight: 800;
+      color: var(--accent-cyan); min-width: 26px; text-align: center;
+      flex-shrink: 0; padding-top: 2px;
+      background: rgba(34, 211, 238, 0.08); border-radius: 6px;
+      align-self: stretch; display: flex; align-items: center; justify-content: center;
+    }
+    .software-item .sw-info { flex: 1; min-width: 0; }
+    .software-item .sw-head {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;
+    }
+    .software-item .sw-name {
+      font-family: var(--font-display); font-size: 14px; font-weight: 700; color: #fff;
+    }
+    .software-item .sw-tag {
+      font-size: 10px; font-weight: 700; color: var(--accent-gold);
+      background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+    }
+    .software-item .sw-desc {
+      font-size: 12px; color: var(--text-muted); line-height: 1.55;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
     .form-wrap {
       max-width: 720px; margin: 0 auto;
@@ -930,246 +974,134 @@
       </div>
     </div>
 
-    <!-- 文鳐软件面板 -->
+    <!-- 文鳐软件面板 · 列表视图 -->
     <div class="product-panel" data-ppanel="software">
-      <div class="product-grid">
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_zhixunwanan.jpg" alt="文鳐智巡万安AI巡检平台">
-            <span class="type-badge">AI巡检</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 智巡万安</h3>
-            <p class="product-desc">依托AI替代传统人工巡检，基于深度学习、计算机视觉和自然语言处理技术，依托10万+自有标注数据集，实现27类隐患、93项现场实体共209种隐患的自动识别。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">数据集：</span>10万+自有标注数据集</div>
-              <div class="product-spec"><span class="key">识别能力：</span>27类隐患 · 93项实体 · 209种隐患</div>
-            </div>
+      <div class="software-list">
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">01</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 智巡万安</span><span class="sw-tag">AI巡检</span></div>
+            <p class="sw-desc">依托AI替代传统人工巡检，基于10万+自有标注数据集，实现27类隐患、93项现场实体共209种隐患的自动识别。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_zhihaiwanxi.jpg" alt="文鳐智海万析数据挖掘平台">
-            <span class="type-badge">数据挖掘</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 智海万析</h3>
-            <p class="product-desc">面向能源行业数据分析场景，提供海量数据采集、清洗、分析与可视化能力，支持业务指标监控、趋势预测、异常检测等功能，助力企业数据驱动决策。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>数据采集 · 智能分析 · 可视化</div>
-              <div class="product-spec"><span class="key">技术应用：</span>大数据引擎 · 机器学习 · BI报表</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">02</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 智海万析</span><span class="sw-tag">数据挖掘</span></div>
+            <p class="sw-desc">面向能源行业数据分析，提供海量数据采集、清洗、分析与可视化能力，支持业务指标监控、趋势预测与异常检测。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_carbon.jpg" alt="文鳐能碳管理平台">
-            <span class="type-badge">能碳管理</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 能碳管理</h3>
-            <p class="product-desc">聚焦能源消耗与碳排放的精细化管理，实现能耗监测、碳核算、节能优化与碳交易全流程管控，助力企业绿色转型与可持续发展。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>能耗监测 · 碳核算 · 节能优化</div>
-              <div class="product-spec"><span class="key">技术应用：</span>能源计量 · 碳足迹 · 智能管控</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">03</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 能碳管理</span><span class="sw-tag">能碳管理</span></div>
+            <p class="sw-desc">聚焦能源消耗与碳排放精细化管理，实现能耗监测、碳核算、节能优化与碳交易全流程管控，助力企业绿色转型。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_investment.jpg" alt="文鳐智投经营管理平台">
-            <span class="type-badge">经营管理</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 智投经营</h3>
-            <p class="product-desc">面向电力工程投资与经营决策，提供项目投资评估、成本控制、收益分析与风险预警等功能，支撑企业科学决策与高效运营。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>投资评估 · 成本控制 · 风险预警</div>
-              <div class="product-spec"><span class="key">技术应用：</span>财务建模 · 决策分析 · 投资组合</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">04</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 智投经营</span><span class="sw-tag">经营管理</span></div>
+            <p class="sw-desc">面向电力工程投资与经营决策，提供项目投资评估、成本控制、收益分析与风险预警，支撑企业科学决策与高效运营。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_power_market.jpg" alt="文鳐电力现货市场仿真平台">
-            <span class="type-badge">市场仿真</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 电力现货交易仿真</h3>
-            <p class="product-desc">面向省级电力现货市场，提供长周期市场仿真模拟、电价预测、交易策略优化等能力，助力市场参与者把握市场趋势与制定交易策略。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>市场仿真 · 电价预测 · 策略优化</div>
-              <div class="product-spec"><span class="key">技术应用：</span>时间序列 · 优化算法 · 仿真引擎</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">05</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 电力现货交易仿真</span><span class="sw-tag">市场仿真</span></div>
+            <p class="sw-desc">面向省级电力现货市场，提供长周期市场仿真模拟、电价预测、交易策略优化，助力把握市场趋势与制定交易策略。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_acceptance.jpg" alt="文鳐输电线路数字化辅助验收平台">
-            <span class="type-badge">智慧基建</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 输电线路数字化辅助验收</h3>
-            <p class="product-desc">面向输电线路工程基建验收场景，融合三维数字化移交、无人机航拍与AI图像识别技术，实现工程质量智能核查与验收流程闭环管控，大幅提升基建验收效率与准确性。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>三维移交 · 智能核查 · 验收管控</div>
-              <div class="product-spec"><span class="key">技术应用：</span>无人机航拍 · AI识别 · 数字化验收</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">06</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 输电线路数字化辅助验收</span><span class="sw-tag">智慧基建</span></div>
+            <p class="sw-desc">融合三维数字化移交、无人机航拍与AI图像识别，实现工程质量智能核查与验收流程闭环管控，提升验收效率与准确性。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_zhihuigongdi.jpg" alt="文鳐智慧工地">
-            <span class="type-badge">智慧基建</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 智慧工地</h3>
-            <p class="product-desc">建设"1+3+N"监控管理平台，打造多项目管理"驾驶舱"，实现工地现场管理模式从被动转变为主动，将施工安全隐患处理于发生之前。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>基建信息一张图 · 平台数据一个库</div>
-              <div class="product-spec"><span class="key">技术应用：</span>现场管理 · 安全监管 · 智能预警</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">07</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 智慧工地</span><span class="sw-tag">智慧基建</span></div>
+            <p class="sw-desc">建设"1+3+N"监控管理平台，打造多项目管理"驾驶舱"，将施工安全隐患处理于发生之前。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_zhihuidianchang.jpg" alt="文鳐智慧电厂">
-            <span class="type-badge">智慧电厂</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 智慧电厂</h3>
-            <p class="product-desc">实现"一个中心，二个半平台，三张网络，四个层级"智能电厂解决方案，具备自适应、自学习、自寻优功能，全面提升电厂运营效率。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>全景AR调度 · 远程智能巡视</div>
-              <div class="product-spec"><span class="key">技术应用：</span>智能作业 · 智慧消防 · 人员定位</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">08</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 智慧电厂</span><span class="sw-tag">智慧电厂</span></div>
+            <p class="sw-desc">"一个中心、二个半平台、三张网络、四个层级"智能电厂方案，具备自适应、自学习、自寻优功能，全面提升运营效率。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_zhihuianquan.jpg" alt="文鳐智慧安全">
-            <span class="type-badge">智慧安全</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 智慧安全</h3>
-            <p class="product-desc">围绕预防、发现、处理、分析四个安全重点管理过程，针对人、车、作业、工器具、环境、程序6大安全管理对象打造主动式闭环安全管控体系。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>事前预防 · 事中控制 · 事后治理</div>
-              <div class="product-spec"><span class="key">技术应用：</span>数据贯通 · 平台协同 · 智能感知</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">09</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 智慧安全</span><span class="sw-tag">智慧安全</span></div>
+            <p class="sw-desc">围绕预防、发现、处理、分析四过程，针对人、车、作业、工器具、环境、程序6大对象打造主动式闭环安全管控体系。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/software_sanweiyijiao.jpg" alt="文鳐三维数字化移交">
-            <span class="type-badge">三维BIM</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 三维数字化移交</h3>
-            <p class="product-desc">基于BIM技术、融合GIS、物联网覆盖电厂基建全流程，实现设计、施工、运维数据的无缝衔接，为电厂数字化转型奠定核心数据基础。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>全专业三维建模 · 自动碰撞检查</div>
-              <div class="product-spec"><span class="key">技术应用：</span>VR培训 · 设备检修 · 应急处置</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">10</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 三维数字化移交</span><span class="sw-tag">三维BIM</span></div>
+            <p class="sw-desc">基于BIM技术、融合GIS与物联网覆盖电厂基建全流程，实现设计、施工、运维数据无缝衔接，奠定数字化转型数据基础。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/solution_design_platform.jpg" alt="文鳐输变电数字化设计平台">
-            <span class="type-badge">数字化设计</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 输变电数字化设计</h3>
-            <p class="product-desc">构建国产自主可控的输电线路数字化勘测设计平台和变电数字化设计平台，实现输变电多专业协同设计、数字化正向设计、参数化建模。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>多专业协同设计 · 参数化建模</div>
-              <div class="product-spec"><span class="key">技术应用：</span>多源数据融合 · 模型轻量化 · 移动端终勘</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">11</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 输变电数字化设计</span><span class="sw-tag">数字化设计</span></div>
+            <p class="sw-desc">构建国产自主可控的输电线路数字化勘测设计与变电数字化设计平台，实现多专业协同设计、数字化正向设计与参数化建模。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/solution_construction_sim.jpg" alt="文鳐输电线路数字化施工仿真平台">
-            <span class="type-badge">施工仿真</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 施工仿真平台</h3>
-            <p class="product-desc">构建"设计-加工-施工-验收"全链条协同建设管控体系，融合混合现实技术实现人机协同作业指导、工程车辆轨迹追踪、工艺工法推演。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>组塔分析 · 架线分析 · 通道分析</div>
-              <div class="product-spec"><span class="key">技术应用：</span>部件级过程模拟 · 施工进度模拟</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">12</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 施工仿真平台</span><span class="sw-tag">施工仿真</span></div>
+            <p class="sw-desc">构建"设计-加工-施工-验收"全链条协同建设管控体系，融合混合现实实现人机协同作业指导与工艺工法推演。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/solution_transport_v2.jpg" alt="文鳐输电线路塔材运输设计平台">
-            <span class="type-badge">运输设计</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 机械化施工道路设计系统</h3>
-            <p class="product-desc">针对输电塔多建于山区、塔材运输困难的痛点，采用BIM、GIS、航摄、AI技术构建塔位数字通道，专门用于钢管、水泥杆、塔材、金具等建材从公路到塔位的运输路径规划与方案设计。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>塔材运输方案设计 · 多方式组合推荐</div>
-              <div class="product-spec"><span class="key">技术应用：</span>智能比选 · 一基一策 · 数字化规划</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">13</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 机械化施工道路设计系统</span><span class="sw-tag">运输设计</span></div>
+            <p class="sw-desc">针对山区塔材运输痛点，采用BIM、GIS、航摄、AI构建塔位数字通道，用于建材从公路到塔位的运输路径规划与方案设计。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/solution_health_monitor.jpg" alt="文鳐监测评估与健康诊断一体化平台">
-            <span class="type-badge">健康诊断</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 健康诊断平台</h3>
-            <p class="product-desc">构建"数字孪生驱动、多源数据融合、智能闭环防控"的运维管理体系，对导地线、金具、绝缘子、杆塔、基础、边坡、通道等进行安全分析和评估。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>全景展示 · 综合监控 · 监测评估</div>
-              <div class="product-spec"><span class="key">技术应用：</span>健康诊断 · 边坡稳定 · 检测鉴定</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">14</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 健康诊断平台</span><span class="sw-tag">健康诊断</span></div>
+            <p class="sw-desc">构建"数字孪生驱动、多源数据融合、智能闭环防控"运维体系，对导地线、金具、绝缘子、杆塔、边坡、通道等进行安全评估。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/solution_solar_management.jpg" alt="文鳐光伏智慧基建管控平台">
-            <span class="type-badge">光伏基建</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 光伏智慧运维</h3>
-            <p class="product-desc">依托大数据、云计算、人工智能、实景三维等信息化手段，利用无人机、机器人进行自动缺陷识别，提升发电量5%-10%，巡检工作量减少40%-75%。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>智能诊断预警 · 设备在线监测</div>
-              <div class="product-spec"><span class="key">技术应用：</span>无人机巡检 · AI缺陷识别</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">15</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 光伏智慧运维</span><span class="sw-tag">光伏基建</span></div>
+            <p class="sw-desc">依托大数据、AI与实景三维，利用无人机、机器人进行自动缺陷识别，提升发电量5%-10%，巡检工作量减少40%-75%。</p>
           </div>
         </div>
 
-        <div class="product-card" data-aos="fade-up">
-          <div class="product-img">
-            <img src="./assets/solution_wind_om.jpg" alt="文鳐风电光伏智慧运维平台">
-            <span class="type-badge">智慧运维</span>
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">文鳐 · 风电智慧运维</h3>
-            <p class="product-desc">深度融合GIS、三维可视化、物联网、大数据、人工智能算法，建立风场三维模型，将生产、管理、安全、经营数据与设备数字化模型绑定，实现全方位智能化运维。</p>
-            <div class="product-specs">
-              <div class="product-spec"><span class="key">核心能力：</span>风机状态自检 · 无人机隐患识别</div>
-              <div class="product-spec"><span class="key">技术应用：</span>异常预警 · 边缘闭环 · 数字孪生</div>
-            </div>
+        <div class="software-item" data-aos="fade-up">
+          <div class="sw-num">16</div>
+          <div class="sw-info">
+            <div class="sw-head"><span class="sw-name">文鳐 · 风电智慧运维</span><span class="sw-tag">智慧运维</span></div>
+            <p class="sw-desc">融合GIS、三维可视化、物联网、大数据与AI算法，建立风场三维模型，实现全方位智能化运维。</p>
           </div>
         </div>
 
@@ -1457,26 +1389,40 @@
     pages.forEach(function(page) {
       const container = page.querySelector(':scope > .container');
       if (!container) return;
-      // 先重置
+      // 先重置，确保测量到真实内容高度
       container.style.transform = 'none';
       container.style.height = '';
-      // 等布局稳定后测量
+      container.style.flexShrink = '';
       const pageH = page.clientHeight;
       const contentH = container.scrollHeight;
       if (contentH > pageH - 4) {
-        // 内容超出一屏：等比缩放至刚好填满
-        const scale = Math.max(0.55, (pageH - 8) / contentH);
+        // 内容超出一屏：等比缩放，并把布局盒高度同步为缩放后高度，避免溢出裁切
+        const scale = Math.max(0.5, (pageH - 8) / contentH);
         container.style.transform = 'scale(' + scale + ')';
-        container.style.transformOrigin = 'center center';
+        container.style.transformOrigin = 'top center';
+        container.style.height = (contentH * scale) + 'px';
         container.style.flexShrink = '0';
       }
     });
   }
-  window.addEventListener('load', function() { setTimeout(fitPagesToScreen, 300); });
+  window.addEventListener('load', function() {
+    setTimeout(fitPagesToScreen, 300);
+    // 图片加载完成后可能改变高度，再校准一次
+    setTimeout(fitPagesToScreen, 1200);
+  });
   window.addEventListener('resize', fitPagesToScreen);
-  // 切换产品 tab 后重新计算
+  // 横向翻页到达新页面时重新计算（解决首屏需点击才正常的问题）
+  let fitScrollDebounce = null;
+  document.body.addEventListener('scroll', function() {
+    if (fitScrollDebounce) clearTimeout(fitScrollDebounce);
+    fitScrollDebounce = setTimeout(fitPagesToScreen, 220);
+  }, { passive: true });
+  // 切换产品 tab 后重新计算（两次：即时 + 动画结束后）
   document.querySelectorAll('.product-tab').forEach(function(tab) {
-    tab.addEventListener('click', function() { setTimeout(fitPagesToScreen, 100); });
+    tab.addEventListener('click', function() {
+      setTimeout(fitPagesToScreen, 120);
+      setTimeout(fitPagesToScreen, 450);
+    });
   });
 </script>
 
