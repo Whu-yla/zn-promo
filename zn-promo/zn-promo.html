@@ -306,7 +306,7 @@
       box-shadow: 0 20px 50px rgba(34, 211, 238, 0.2);
     }
     .platform-card:hover::before { opacity: 1; }
-    .platform-img { height: clamp(90px, 16vh, 200px); overflow: hidden; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); position: relative; }
+    .platform-img { height: clamp(90px, 16vh, 300px); overflow: hidden; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); position: relative; }
     .platform-img img { width: 100%; height: 100%; object-fit: contain; object-position: center center; padding: 6px; transition: transform 0.5s ease; }
     .platform-card:hover .platform-img img { transform: scale(1.06); }
     .platform-body { padding: 14px 18px 16px; flex: 1 1 auto; overflow: hidden; display: flex; flex-direction: column; }
@@ -392,7 +392,7 @@
       border-color: var(--accent-cyan);
       box-shadow: 0 15px 40px rgba(34, 211, 238, 0.15);
     }
-    .product-img { height: clamp(90px, 16vh, 200px); overflow: hidden; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); position: relative; }
+    .product-img { height: clamp(90px, 16vh, 300px); overflow: hidden; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); position: relative; }
     .product-img img { width: 100%; height: 100%; object-fit: contain; object-position: center center; padding: 6px; transition: transform 0.5s ease; }
     .product-card:hover .product-img img { transform: scale(1.06); }
     .product-img .type-badge {
@@ -710,6 +710,45 @@
       .hero-stat .num { font-size: 40px; }
       .hero-stat .label { font-size: 15px; }
       .product-tabs { margin-bottom: 36px; }
+    }
+    /* 4K超高分屏（≥1800px，如3840×2160）：全面放大卡片内部、图片、间距 */
+    @media (min-height: 1800px) {
+      :root { --max-width: 1760px; }
+      body > header.hero, body > section { padding-top: 110px; padding-bottom: 36px; }
+      .section-head { margin-bottom: 60px; }
+      .section-eyebrow { font-size: 18px; margin-bottom: 18px; }
+      .section-title { font-size: 64px; }
+      .section-desc { font-size: 22px; }
+      .hero h1 { font-size: 92px; }
+      .hero-sub { font-size: 26px; max-width: 1000px; }
+      .hero-stat .num { font-size: 56px; }
+      .hero-stat .label { font-size: 19px; }
+      .hero-badge { font-size: 16px; padding: 12px 26px; }
+      .profile-content p { font-size: 19px; line-height: 1.9; }
+      .profile-content .lead { font-size: 22px; }
+      .profile-tag { font-size: 15px; padding: 8px 18px; }
+      .qual-card { padding: 26px 16px; }
+      .qual-card .qnum { font-size: 38px; }
+      .qual-card .qlabel { font-size: 16px; margin-top: 12px; }
+      .platform-grid, .product-grid { gap: 28px; }
+      .platform-body { padding: 24px 28px 28px; }
+      .platform-tag { font-size: 14px; padding: 6px 16px; margin-bottom: 12px; }
+      .platform-title { font-size: 24px; margin-bottom: 14px; }
+      .platform-desc { font-size: 17px; line-height: 1.8; -webkit-line-clamp: 3; }
+      .platform-features { margin-top: 18px; gap: 10px; }
+      .platform-features span { font-size: 15px; padding: 6px 14px; }
+      .product-body { padding: 22px 26px 26px; }
+      .product-name { font-size: 22px; margin-bottom: 14px; }
+      .product-desc { font-size: 16px; line-height: 1.8; -webkit-line-clamp: 3; }
+      .product-specs { margin-top: 16px; gap: 10px; }
+      .product-spec { font-size: 15px; line-height: 1.6; }
+      .product-tab { padding: 18px 44px; font-size: 20px; }
+      .product-tabs { margin-bottom: 48px; gap: 20px; }
+      .software-item { padding: 18px 26px; }
+      .software-item .sw-num { font-size: 26px; min-width: 44px; }
+      .software-item .sw-name { font-size: 21px; }
+      .software-item .sw-desc { font-size: 16px; line-height: 1.7; }
+      .software-item .sw-tag { font-size: 14px; padding: 5px 14px; }
     }
     /* 标准屏（≤900px，如 1080p 去顶栏后、1440×900）：轻度压缩 */
     @media (max-height: 900px) {
