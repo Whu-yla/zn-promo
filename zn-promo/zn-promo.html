@@ -175,8 +175,56 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .hero-sub {
-      font-size: 14px; color: var(--text-secondary); max-width: 100%;
+    .hero-tagline {
+      font-family: var(--font-display);
+      font-size: 22px; font-weight: 700; line-height: 1.3;
+      margin: 4px 0 14px; letter-spacing: 0.04em;
+      display: inline-flex; align-items: center; gap: 14px;
+      padding: 10px 22px 10px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), rgba(251, 191, 36, 0.08));
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      box-shadow:
+        0 0 0 1px rgba(34, 211, 238, 0.08) inset,
+        0 0 24px rgba(34, 211, 238, 0.18),
+        0 0 60px rgba(59, 130, 246, 0.12);
+      backdrop-filter: blur(12px);
+      position: relative; overflow: hidden;
+    }
+    .hero-tagline::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 12px var(--accent-cyan), 0 0 24px var(--accent-cyan);
+      animation: tag-pulse 1.8s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    .hero-tagline::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.25) 50%, transparent 70%);
+      background-size: 200% 100%;
+      animation: tag-shimmer 3.5s linear infinite;
+      pointer-events: none;
+    }
+    .hero-tagline .tag-text {
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, #fff 55%, var(--accent-gold) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative; z-index: 1;
+    }
+    @keyframes tag-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.35); }
+    }
+    @keyframes tag-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .hero-slogan {
+      font-size: 16px; font-weight: 600; color: var(--text-primary);
+      margin-bottom: 14px; line-height: 1.5; letter-spacing: 0.02em;
+    }
+    .hero-desc {
+      font-size: 13px; color: var(--text-secondary); max-width: 100%;
       margin-bottom: 28px; line-height: 1.7;
     }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 36px; }
@@ -195,7 +243,9 @@
     }
     @media (min-width: 768px) {
       .hero h1 { font-size: 36px; margin-bottom: 20px; }
-      .hero-sub { font-size: 16px; max-width: 680px; margin-bottom: 36px; }
+      .hero-tagline { font-size: 26px; padding: 12px 26px 12px 20px; }
+      .hero-slogan { font-size: 20px; max-width: 680px; }
+      .hero-desc { font-size: 15px; max-width: 680px; margin-bottom: 36px; }
       .hero-actions { gap: 16px; margin-bottom: 48px; }
       .btn-primary { font-size: 14px; padding: 14px 32px; }
       .btn-outline { font-size: 14px; padding: 13px 30px; }
@@ -220,7 +270,9 @@
     .hero-stat .label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
     @media (min-width: 768px) {
       .hero h1 { font-size: 56px; }
-      .hero-sub { font-size: 18px; }
+      .hero-tagline { font-size: 34px; padding: 14px 32px 14px 24px; }
+      .hero-slogan { font-size: 24px; }
+      .hero-desc { font-size: 17px; }
       .hero-stats { grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 600px; }
       .hero-stat { padding: 20px; border-radius: 14px; }
       .hero-stat .num { font-size: 32px; }
@@ -620,9 +672,10 @@
 <header class="hero">
   <div class="hero-bg"></div>
   <div class="container hero-inner">
-    <span class="hero-badge"><span class="dot"></span>装备展 · 智慧应用解决方案</span>
-    <h1><span class="brand-gradient">中南</span>电力设计院·<span class="brand-gradient">数智</span>科技<br><span style="color:#e2e8f0">智慧应用解决方案</span></h1>
-    <p class="hero-sub">世界500强中国能建旗下全资子公司，70年深耕能源电力工程，以"云、大、物、移、智、链"技术为基础，为能源电力全产业链提供数智化产品与服务。</p>
+    <h1><span class="brand-gradient">中南</span>电力设计院·<span class="brand-gradient">数智</span>科技</h1>
+    <p class="hero-tagline"><span class="tag-text">最懂电力工程的数智化合作伙伴</span></p>
+    <p class="hero-slogan">用数智之力 · 赋能电力工程全生命周期</p>
+    <p class="hero-desc">依托70余年电力工程积淀，以文鳐（软件）和玄武（硬件）双品牌产品矩阵，以及专业且务实的智慧化解决方案，为客户提供电力工程全生命周期数智化服务。</p>
     <div class="hero-actions">
       <a href="#products" class="btn-primary">查看数智产品 →</a>
       <a href="#register" class="btn-register">合作意向登记 <span class="arrow">→</span></a>
