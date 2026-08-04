@@ -601,35 +601,43 @@
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
     }
-    /* 每个主区块各占一屏，内部允许竖向滚动 */
+    /* 每个主区块各占一屏，像 PPT 一样占满整屏，不竖向滚动 */
     body > header.hero,
-    body > section,
-    body > .contact-bar,
-    body > footer {
+    body > section {
       flex: 0 0 100vw;
       width: 100vw;
       min-width: 100vw;
       height: 100vh;
       height: 100dvh;
       min-height: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: hidden;
       scroll-snap-align: start;
       scroll-snap-stop: always;
       -webkit-overflow-scrolling: touch;
       padding-top: 80px;
+      padding-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-    body > header.hero { padding-top: 84px; }
+    body > header.hero { padding-top: 84px; justify-content: center; }
     .hero { min-height: 0; }
-    /* footer 内容少，垂直居中 */
-    body > footer {
-      display: flex; flex-direction: column; justify-content: center;
+    /* 内容容器撑满并垂直居中 */
+    body > header.hero > .container,
+    body > section > .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1 1 auto;
+      min-height: 0;
     }
     /* 横向滚动条隐藏，保持沉浸感 */
     body::-webkit-scrollbar { display: none; }
     body { scrollbar-width: none; -ms-overflow-style: none; }
-    /* 桌面端：横向键盘左右键翻页，鼠标滚轮转横向 */
-    body { scrollbar-width: none; }
   </style>
 </head>
 <body id="top">
@@ -1265,14 +1273,14 @@
   </div>
 </section>
 
-<section class="core-section">
+<section class="core-section" id="contact">
   <div class="container">
     <div class="section-head" data-aos="fade-up">
       <span class="section-eyebrow">Honors & Awards</span>
       <h2 class="section-title">荣誉与奖项</h2>
       <p class="section-desc">多次荣获国家科技进步奖特等奖、一等奖及各类行业优秀工程奖项。</p>
     </div>
-    <div class="qual-grid" style="grid-template-columns:repeat(2,1fr)">
+    <div class="qual-grid" style="grid-template-columns:repeat(3,1fr)">
       <div class="qual-card" data-aos="zoom-in"><div class="qnum" style="color:var(--accent-cyan)">特等奖</div><div class="qlabel" style="color:#cbd5e1">中国能建2023年优秀数字化案例</div></div>
       <div class="qual-card" data-aos="zoom-in"><div class="qnum" style="color:var(--accent-cyan)">五星典型</div><div class="qlabel" style="color:#cbd5e1">电力建设智慧工程典型案例 (2024)</div></div>
       <div class="qual-card" data-aos="zoom-in"><div class="qnum" style="color:var(--accent-cyan)">第二名</div><div class="qlabel" style="color:#cbd5e1">中国电力数字工程EIM大赛火力发电 (2024)</div></div>
@@ -1280,12 +1288,8 @@
       <div class="qual-card" data-aos="zoom-in"><div class="qnum" style="color:var(--accent-cyan)">一等奖</div><div class="qlabel" style="color:#cbd5e1">电力行业优秀计算机软件 (2023)</div></div>
       <div class="qual-card" data-aos="zoom-in"><div class="qnum" style="color:var(--accent-cyan)">十大新技术</div><div class="qlabel" style="color:#cbd5e1">天空地一体化安全监测关键技术 (2022)</div></div>
     </div>
-  </div>
-</section>
 
-<div class="contact-bar" id="contact">
-  <div class="container">
-    <div class="contact-grid">
+    <div class="contact-grid" style="margin-top:36px">
       <div class="contact-item">
         <div class="ci-icon">📞</div>
         <div>
@@ -1308,14 +1312,14 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<footer>
-  <div class="footer-logo">CSDI DIGITAL</div>
-  <p>中南电力设计院数智科技 · 智慧应用解决方案</p>
-  <p style="margin-top:8px">Copyright © 2024 Central Southern Digital Intelligence. All rights reserved.</p>
-</footer>
+    <div class="footer-block">
+      <div class="footer-logo">CSDI DIGITAL</div>
+      <p>中南电力设计院数智科技 · 智慧应用解决方案</p>
+      <p style="margin-top:4px">Copyright © 2024 Central Southern Digital Intelligence. All rights reserved.</p>
+    </div>
+  </div>
+</section>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
@@ -1446,6 +1450,34 @@
   }, { passive: true });
   // 页面初始：先等 5 分钟再开始
   autoTimer = setTimeout(startAutoPlay, AUTO_DELAY);
+
+  // ===== 每页内容自适应缩放至一屏（PPT 效果）=====
+  function fitPagesToScreen() {
+    const pages = document.querySelectorAll('body > header.hero, body > section');
+    pages.forEach(function(page) {
+      const container = page.querySelector(':scope > .container');
+      if (!container) return;
+      // 先重置
+      container.style.transform = 'none';
+      container.style.height = '';
+      // 等布局稳定后测量
+      const pageH = page.clientHeight;
+      const contentH = container.scrollHeight;
+      if (contentH > pageH - 4) {
+        // 内容超出一屏：等比缩放至刚好填满
+        const scale = Math.max(0.55, (pageH - 8) / contentH);
+        container.style.transform = 'scale(' + scale + ')';
+        container.style.transformOrigin = 'center center';
+        container.style.flexShrink = '0';
+      }
+    });
+  }
+  window.addEventListener('load', function() { setTimeout(fitPagesToScreen, 300); });
+  window.addEventListener('resize', fitPagesToScreen);
+  // 切换产品 tab 后重新计算
+  document.querySelectorAll('.product-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() { setTimeout(fitPagesToScreen, 100); });
+  });
 </script>
 
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="返回顶部">↑</button>
