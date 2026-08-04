@@ -711,8 +711,8 @@
       .hero-stat .label { font-size: 15px; }
       .product-tabs { margin-bottom: 36px; }
     }
-    /* 4K超高分屏（≥1800px，如3840×2160）：全面放大卡片内部、图片、间距 */
-    @media (min-height: 1800px) {
+    /* 4K超高分屏：≥1800px原生 或 高DPI(4K+缩放)视口≥1300px */
+    @media (min-height: 1800px), screen and (min-resolution: 2dppx) and (min-height: 1300px) {
       :root { --max-width: 1760px; }
       body > header.hero, body > section { padding-top: 110px; padding-bottom: 36px; }
       .section-head { margin-bottom: 60px; }
