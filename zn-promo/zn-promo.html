@@ -586,50 +586,50 @@
       .back-to-top { bottom: 32px; right: 32px; width: 48px; height: 48px; font-size: 20px; }
     }
 
-    /* ============ 移动端横向分屏滑动 ============ */
-    @media (max-width: 767px) {
-      html, body {
-        height: 100vh;
-        height: 100dvh;
-        overflow: hidden;
-      }
-      body {
-        display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-      }
-      /* 每个主区块各占一屏，内部允许竖向滚动 */
-      body > header.hero,
-      body > section,
-      body > .contact-bar,
-      body > footer {
-        flex: 0 0 100vw;
-        width: 100vw;
-        min-width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        min-height: 0;
-        overflow-y: auto;
-        overflow-x: hidden;
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-        -webkit-overflow-scrolling: touch;
-        padding-top: 76px;
-      }
-      body > header.hero { padding-top: 84px; }
-      .hero { min-height: 0; }
-      /* footer 内容少，垂直居中 */
-      body > footer {
-        display: flex; flex-direction: column; justify-content: center;
-      }
-      /* 滚动条隐藏，保持沉浸感 */
-      body::-webkit-scrollbar { display: none; }
-      body { scrollbar-width: none; -ms-overflow-style: none; }
+    /* ============ 全屏横向分屏翻页（桌面+移动） ============ */
+    html, body {
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
     }
+    body {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* 每个主区块各占一屏，内部允许竖向滚动 */
+    body > header.hero,
+    body > section,
+    body > .contact-bar,
+    body > footer {
+      flex: 0 0 100vw;
+      width: 100vw;
+      min-width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      -webkit-overflow-scrolling: touch;
+      padding-top: 80px;
+    }
+    body > header.hero { padding-top: 84px; }
+    .hero { min-height: 0; }
+    /* footer 内容少，垂直居中 */
+    body > footer {
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    /* 横向滚动条隐藏，保持沉浸感 */
+    body::-webkit-scrollbar { display: none; }
+    body { scrollbar-width: none; -ms-overflow-style: none; }
+    /* 桌面端：横向键盘左右键翻页，鼠标滚轮转横向 */
+    body { scrollbar-width: none; }
   </style>
 </head>
 <body id="top">
@@ -658,7 +658,6 @@
   <a href="#core" onclick="closeMobileMenu()">核心支撑</a>
   <a href="#products" onclick="closeMobileMenu()">数智产品</a>
   <a href="#contact" onclick="closeMobileMenu()">联系我们</a>
-  <a href="#register" class="mobile-menu-cta" onclick="closeMobileMenu()">合作登记</a>
 </div>
 
 <header class="hero">
@@ -669,7 +668,6 @@
     <p class="hero-sub">世界500强中国能建旗下全资子公司，70余年深耕能源电力工程，以"云、大、物、移、智、链"技术为基础，为能源电力全产业链提供数智化产品与服务。</p>
     <div class="hero-actions">
       <a href="#products" class="btn-primary">查看数智产品 →</a>
-      <a href="#register" class="btn-register">合作意向登记 <span class="arrow">→</span></a>
     </div>
     <div class="hero-stats">
       <div class="hero-stat"><div class="num">70<span>+</span></div><div class="label">电力工程深耕</div></div>
@@ -1285,69 +1283,6 @@
   </div>
 </section>
 
-<section id="register">
-  <div class="container">
-    <div class="section-head" data-aos="fade-up">
-      <span class="section-eyebrow">Cooperation</span>
-      <h2 class="section-title">合作意向登记</h2>
-      <p class="section-desc">诚邀各界伙伴共建数字生态、共创能源未来。请留下您的信息，我们将尽快与您联系。</p>
-    </div>
-
-    <div class="form-wrap">
-      <form id="regForm" onsubmit="return submitForm(event)">
-        <div class="form-grid-2">
-          <div class="form-row">
-            <label>姓名 <span class="req">*</span></label>
-            <input type="text" name="name" required placeholder="请输入您的姓名" maxlength="50" onblur="validateName(this)">
-            <span class="form-error" id="err-name"></span>
-          </div>
-          <div class="form-row">
-            <label>单位名称 <span class="req">*</span></label>
-            <input type="text" name="company" required placeholder="请输入您的单位名称" maxlength="100" onblur="validateCompany(this)">
-            <span class="form-error" id="err-company"></span>
-          </div>
-        </div>
-        <div class="form-grid-2">
-          <div class="form-row">
-            <label>手机号码 <span class="req">*</span></label>
-            <input type="tel" name="phone" required placeholder="请输入11位手机号" maxlength="11" onblur="validatePhone(this)" oninput="formatPhone(this)">
-            <span class="form-error" id="err-phone"></span>
-          </div>
-          <div class="form-row">
-            <label>电子邮箱 <span class="req">*</span></label>
-            <input type="email" name="email" required placeholder="请输入邮箱地址" maxlength="100" onblur="validateEmail(this)">
-            <span class="form-error" id="err-email"></span>
-          </div>
-        </div>
-        <div class="form-row">
-          <label>感兴趣的方向 <span class="req">*</span></label>
-          <select name="interest" required onchange="validateInterest(this)">
-            <option value="">请选择您感兴趣的合作方向</option>
-            <option value="core">核心支撑平台（智孪万维/智电万通等）</option>
-            <option value="hardware">玄武系列硬件装备</option>
-            <option value="software">文鳐系列软件产品</option>
-            <option value="solutions">行业数字化解决方案</option>
-          </select>
-          <span class="form-error" id="err-interest"></span>
-        </div>
-        <div class="form-row">
-          <label>合作需求</label>
-          <textarea name="message" placeholder="请描述您的合作需求或想法..." maxlength="500" oninput="updateCharCount(this)"></textarea>
-          <span class="form-hint" id="char-count">0/500</span>
-        </div>
-        <button type="submit" class="form-submit">提交合作意向</button>
-        <p class="form-note">您的信息将被严格保密，仅用于合作洽谈</p>
-      </form>
-      <div class="form-success" id="formSuccess">
-        <div class="icon">✓</div>
-        <h3>提交成功</h3>
-        <p>感谢您的合作意向，我们将在1-3个工作日内与您联系！</p>
-        <button class="form-reset" onclick="resetForm()">继续提交</button>
-      </div>
-    </div>
-  </div>
-</section>
-
 <div class="contact-bar" id="contact">
   <div class="container">
     <div class="contact-grid">
@@ -1393,136 +1328,6 @@
 </script>
 
 <script>
-  function formatPhone(input) {
-    let val = input.value.replace(/\D/g, '');
-    input.value = val;
-  }
-
-  function validateName(input) {
-    const err = document.getElementById('err-name');
-    if (!input.value.trim()) {
-      err.textContent = '请输入姓名';
-      err.classList.add('show');
-      input.classList.add('error-input');
-      return false;
-    }
-    err.classList.remove('show');
-    input.classList.remove('error-input');
-    input.classList.add('success-input');
-    return true;
-  }
-
-  function validateCompany(input) {
-    const err = document.getElementById('err-company');
-    if (!input.value.trim()) {
-      err.textContent = '请输入单位名称';
-      err.classList.add('show');
-      input.classList.add('error-input');
-      return false;
-    }
-    err.classList.remove('show');
-    input.classList.remove('error-input');
-    input.classList.add('success-input');
-    return true;
-  }
-
-  function validatePhone(input) {
-    const err = document.getElementById('err-phone');
-    const val = input.value.replace(/\D/g, '');
-    if (val.length !== 11) {
-      err.textContent = '请输入11位手机号码';
-      err.classList.add('show');
-      input.classList.add('error-input');
-      return false;
-    }
-    err.classList.remove('show');
-    input.classList.remove('error-input');
-    input.classList.add('success-input');
-    return true;
-  }
-
-  function validateEmail(input) {
-    const err = document.getElementById('err-email');
-    if (!input.value.trim()) {
-      err.textContent = '请输入电子邮箱';
-      err.classList.add('show');
-      input.classList.add('error-input');
-      return false;
-    }
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!regex.test(input.value)) {
-      err.textContent = '请输入有效的邮箱地址';
-      err.classList.add('show');
-      input.classList.add('error-input');
-      return false;
-    }
-    err.classList.remove('show');
-    input.classList.remove('error-input');
-    input.classList.add('success-input');
-    return true;
-  }
-
-  function validateInterest(input) {
-    const err = document.getElementById('err-interest');
-    if (!input.value) {
-      err.textContent = '请选择感兴趣的方向';
-      err.classList.add('show');
-      input.classList.add('error-input');
-      return false;
-    }
-    err.classList.remove('show');
-    input.classList.remove('error-input');
-    input.classList.add('success-input');
-    return true;
-  }
-
-  function updateCharCount(textarea) {
-    const count = document.getElementById('char-count');
-    count.textContent = textarea.value.length + '/500';
-  }
-
-  async function submitForm(e) {
-    e.preventDefault();
-    const form = e.target;
-    const valid = validateName(form.name) && validateCompany(form.company) && validatePhone(form.phone) && validateEmail(form.email) && validateInterest(form.interest);
-    if (!valid) return;
-
-    const formData = {
-      name: form.name.value.trim(),
-      company: form.company.value.trim(),
-      phone: form.phone.value.trim(),
-      email: form.email.value.trim(),
-      interest: form.interest.value,
-      message: form.message.value.trim(),
-      created_at: new Date().toISOString()
-    };
-
-    try {
-      const response = await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      if (response.ok) {
-        form.style.display = 'none';
-        document.getElementById('formSuccess').style.display = 'block';
-      } else {
-        const result = await response.json();
-        alert('提交失败：' + (result.detail || '请稍后重试'));
-      }
-    } catch (error) {
-      alert('网络连接失败，请检查网络');
-    }
-  }
-
-  function resetForm() {
-    document.getElementById('formSuccess').style.display = 'none';
-    document.getElementById('regForm').style.display = 'block';
-    document.getElementById('regForm').reset();
-    document.getElementById('char-count').textContent = '0/500';
-    document.querySelectorAll('.success-input').forEach(el => el.classList.remove('success-input'));
-  }
-
   // 产品系列 Tab 切换
   document.querySelectorAll('.product-tab').forEach(tab => {
     tab.addEventListener('click', function() {
@@ -1533,15 +1338,11 @@
     });
   });
 
-  function isMobileHorizontal() {
-    return window.matchMedia('(max-width: 767px)').matches;
-  }
-
+  // ===== 横向分屏：滚动处理 =====
   function handleScroll() {
     const nav = document.getElementById('topnav');
     const backBtn = document.getElementById('backToTop');
-    // 移动端：横向滚动距离；桌面端：竖向滚动距离
-    const pos = isMobileHorizontal() ? document.body.scrollLeft : window.scrollY;
+    const pos = document.body.scrollLeft;
     if (pos > 50) {
       nav.classList.add('scrolled');
     } else {
@@ -1553,30 +1354,98 @@
       backBtn.classList.remove('show');
     }
   }
-  window.addEventListener('scroll', handleScroll);
-  // 移动端 body 自身横向滚动
   document.body.addEventListener('scroll', handleScroll);
 
-  // 移动端菜单
+  // ===== 鼠标滚轮转横向翻页（桌面端）=====
+  document.body.addEventListener('wheel', function(e) {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      e.preventDefault();
+      document.body.scrollLeft += e.deltaY;
+    }
+  }, { passive: false });
+
+  // ===== 键盘左右键翻页 =====
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === ' ' || e.key === 'PageDown' || e.key === 'PageUp') {
+      markUserActive();
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      e.preventDefault();
+      nextPage();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      prevPage();
+    }
+  });
+
+  // ===== 移动端菜单 =====
   function toggleMobileMenu() {
     const menu = document.getElementById('mobileMenu');
     menu.classList.toggle('active');
-    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
   }
   function closeMobileMenu() {
     const menu = document.getElementById('mobileMenu');
     menu.classList.remove('active');
-    document.body.style.overflow = '';
   }
 
-  // 返回顶部（移动端=回到首屏）
-  function scrollToTop() {
-    if (isMobileHorizontal()) {
-      document.body.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  // ===== 翻页辅助 =====
+  function pageWidth() { return window.innerWidth; }
+  function currentPage() { return Math.round(document.body.scrollLeft / pageWidth()); }
+  function totalPages() { return Math.max(1, Math.round(document.body.scrollWidth / pageWidth())); }
+  function goToPage(i) {
+    const n = totalPages();
+    i = ((i % n) + n) % n; // 循环
+    document.body.scrollTo({ left: i * pageWidth(), behavior: 'smooth' });
   }
+  function nextPage() { goToPage(currentPage() + 1); }
+  function prevPage() { goToPage(currentPage() - 1); }
+
+  // 返回顶部 = 回到首屏
+  function scrollToTop() {
+    document.body.scrollTo({ left: 0, behavior: 'smooth' });
+  }
+
+  // ===== 自动轮回播放：5分钟无操作开始，收到操作切回人工 =====
+  const AUTO_DELAY = 5 * 60 * 1000;   // 5 分钟无操作后启动
+  const AUTO_INTERVAL = 6000;         // 自动模式下每屏停留 6 秒
+  let autoTimer = null;               // 启动自动播放的延迟计时器
+  let playTimer = null;               // 自动翻页的循环计时器
+  let programScroll = false;          // 标记当前滚动由程序触发，避免误判为用户操作
+
+  function startAutoPlay() {
+    if (playTimer) return;
+    document.body.setAttribute('data-autoplay', 'on');
+    playTimer = setInterval(function() {
+      if (document.getElementById('mobileMenu').classList.contains('active')) return;
+      programScroll = true;
+      nextPage();
+      setTimeout(function() { programScroll = false; }, 800);
+    }, AUTO_INTERVAL);
+  }
+  function stopAutoPlay() {
+    if (playTimer) { clearInterval(playTimer); playTimer = null; }
+    document.body.removeAttribute('data-autoplay');
+  }
+  // 收到任何用户操作：立即暂停自动播放，并重置 5 分钟倒计时
+  function markUserActive() {
+    if (programScroll) return; // 程序自身滚动不触发
+    stopAutoPlay();
+    if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+    autoTimer = setTimeout(startAutoPlay, AUTO_DELAY);
+  }
+  // 监听实质性用户操作（不含 mousemove，避免鼠标抖动持续重置）
+  ['mousedown','touchstart','wheel','keydown','click'].forEach(function(ev) {
+    document.addEventListener(ev, markUserActive, { passive: true });
+  });
+  // 用户手动滚动（横向拖动滚动条等）也算操作
+  let scrollDebounce = null;
+  document.body.addEventListener('scroll', function() {
+    if (programScroll) return;
+    if (scrollDebounce) clearTimeout(scrollDebounce);
+    scrollDebounce = setTimeout(markUserActive, 150);
+  }, { passive: true });
+  // 页面初始：先等 5 分钟再开始
+  autoTimer = setTimeout(startAutoPlay, AUTO_DELAY);
 </script>
 
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="返回顶部">↑</button>
