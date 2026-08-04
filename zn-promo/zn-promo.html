@@ -388,7 +388,7 @@
       border-color: var(--accent-cyan);
       box-shadow: 0 15px 40px rgba(34, 211, 238, 0.15);
     }
-    .product-img { aspect-ratio: 16/10; overflow: hidden; background: #0f172a; position: relative; }
+    .product-img { height: clamp(60px, 12vh, 160px); overflow: hidden; background: #0f172a; position: relative; }
     .product-img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
     .product-img .type-badge {
       position: absolute; top: 12px; right: 12px;
@@ -743,7 +743,6 @@
       .platform-features { margin-top: 6px; gap: 4px; }
       .platform-features span { font-size: 10px; padding: 2px 7px; }
       .product-grid { gap: 12px; }
-      .product-img { aspect-ratio: 20/10; }
       .product-body { padding: 9px 13px 11px; }
       .product-name { font-size: 13.5px; margin-bottom: 5px; }
       .product-desc { font-size: 11.5px; line-height: 1.5; }
