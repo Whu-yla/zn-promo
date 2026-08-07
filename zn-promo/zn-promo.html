@@ -401,6 +401,13 @@
     .product-tab .tab-icon {
       font-size: 10px; color: var(--accent-gold); transition: all 0.3s;
     }
+    .product-tab img.tab-icon {
+      width: 18px; height: 18px; object-fit: contain; display: inline-block;
+      filter: brightness(0) invert(1);
+    }
+    .product-tab.active img.tab-icon {
+      filter: brightness(0) invert(0);
+    }
     .product-tab:hover {
       border-color: var(--accent-cyan); color: var(--accent-cyan);
       box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
@@ -789,7 +796,7 @@
         <div class="platform-body">
           <span class="platform-tag">可信数据空间</span>
           <h3 class="platform-title">可信数据空间 · 数据资产平台</h3>
-          <p class="platform-desc">依托中南数智自主研发的可信数据空间技术底座，结合电力工程业务场景定制化开发，实现数据全流程可信管控与价值挖掘，保障数据主权与安全共享。</p>
+          <p class="platform-desc">基于可信数据空间技术底座，结合电力工程业务场景定制化开发，实现数据全流程可信管控与价值挖掘，保障数据主权与安全共享。</p>
           <div class="platform-features">
             <span>数据注册编目</span><span>质量管控</span><span>主权管理</span><span>区块链存证</span>
           </div>
@@ -822,10 +829,10 @@
     <!-- 三大系列 Tab 切换 -->
     <div class="product-tabs">
       <button class="product-tab active" data-ptab="hardware">
-        <span class="tab-icon">&#9670;</span>玄武硬件
+        <img class="tab-icon" src="./assets/玄武logo.png" alt="玄武">玄武硬件
       </button>
       <button class="product-tab" data-ptab="software">
-        <span class="tab-icon">&#9671;</span>文鳐软件
+        <img class="tab-icon" src="./assets/文鳐logo.png" alt="文鳐">文鳐软件
       </button>
       <button class="product-tab" data-ptab="solutions">
         <span class="tab-icon">&#9672;</span>行业方案
