@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, Query, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel, Field, EmailStr
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
@@ -40,6 +40,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DB_PATH = "cooperation.db"
 
@@ -533,6 +535,45 @@ async def get_logs(
         } for row in rows]
     finally:
         conn.close()
+
+@app.get("/")
+async def serve_promo_page():
+    return FileResponse(os.path.join(BASE_DIR, "zn-promo.html"))
+
+@app.get("/admin")
+async def serve_admin_page():
+    return FileResponse(os.path.join(BASE_DIR, "admin.html"))
+
+@app.get("/qr-poster.html")
+async def serve_qr_poster_page():
+    return FileResponse(os.path.join(BASE_DIR, "qr-poster.html"))
+
+@app.get("/monitor.html")
+async def serve_monitor_page():
+    return FileResponse(os.path.join(BASE_DIR, "monitor.html"))
+
+@app.get("/swagger.html")
+async def serve_swagger_page():
+    return FileResponse(os.path.join(BASE_DIR, "swagger.html"))
+
+@app.get("/training-notice.html")
+async def serve_training_notice_page():
+    return FileResponse(os.path.join(BASE_DIR, "training-notice.html"))
+
+@app.get("/admin/assets/{path:path}")
+async def serve_admin_assets(path: str):
+    file_path = os.path.join(BASE_DIR, "assets", path)
+    return FileResponse(file_path)
+
+@app.get("/assets/{path:path}")
+async def serve_assets(path: str):
+    file_path = os.path.join(BASE_DIR, "assets", path)
+    return FileResponse(file_path)
+
+@app.get("/training-qr.jpg")
+async def serve_training_qr():
+    file_path = os.path.join(BASE_DIR, "assets", "training-qr.jpg")
+    return FileResponse(file_path)
 
 # ==================== 服务监控 API ====================
 MONITOR_STATUS_FILE = os.path.join(os.path.dirname(__file__), "monitor_status.json")
