@@ -1516,10 +1516,18 @@
   document.body.addEventListener('scroll', handleScroll);
 
   // ===== 鼠标滚轮转横向翻页（桌面端）=====
+  let wheelLock = false;
   document.body.addEventListener('wheel', function(e) {
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       e.preventDefault();
-      document.body.scrollLeft += e.deltaY;
+      if (wheelLock) return;
+      wheelLock = true;
+      if (e.deltaY > 0) {
+        nextPage();
+      } else {
+        prevPage();
+      }
+      setTimeout(function() { wheelLock = false; }, 600);
     }
   }, { passive: false });
 
