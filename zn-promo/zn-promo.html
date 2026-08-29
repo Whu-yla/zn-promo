@@ -401,6 +401,13 @@
     .product-tab .tab-icon {
       font-size: 10px; color: var(--accent-gold); transition: all 0.3s;
     }
+    .product-tab img.tab-icon {
+      width: 18px; height: 18px; object-fit: contain; display: inline-block;
+      filter: brightness(0) invert(1);
+    }
+    .product-tab.active img.tab-icon {
+      filter: brightness(0) invert(0);
+    }
     .product-tab:hover {
       border-color: var(--accent-cyan); color: var(--accent-cyan);
       box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
@@ -789,7 +796,7 @@
         <div class="platform-body">
           <span class="platform-tag">可信数据空间</span>
           <h3 class="platform-title">可信数据空间 · 数据资产平台</h3>
-          <p class="platform-desc">依托中南数智自主研发的可信数据空间技术底座，结合电力工程业务场景定制化开发，实现数据全流程可信管控与价值挖掘，保障数据主权与安全共享。</p>
+          <p class="platform-desc">基于可信数据空间技术底座，结合电力工程业务场景定制化开发，实现数据全流程可信管控与价值挖掘，保障数据主权与安全共享。</p>
           <div class="platform-features">
             <span>数据注册编目</span><span>质量管控</span><span>主权管理</span><span>区块链存证</span>
           </div>
@@ -822,10 +829,10 @@
     <!-- 三大系列 Tab 切换 -->
     <div class="product-tabs">
       <button class="product-tab active" data-ptab="hardware">
-        <span class="tab-icon">&#9670;</span>玄武硬件
+        <img class="tab-icon" src="./assets/玄武logo.png" alt="玄武">玄武硬件
       </button>
       <button class="product-tab" data-ptab="software">
-        <span class="tab-icon">&#9671;</span>文鳐软件
+        <img class="tab-icon" src="./assets/文鳐logo.png" alt="文鳐">文鳐软件
       </button>
       <button class="product-tab" data-ptab="solutions">
         <span class="tab-icon">&#9672;</span>行业方案
@@ -841,7 +848,7 @@
             <span class="type-badge hw">硬件装备</span>
           </div>
           <div class="product-body">
-            <h3 class="product-name">玄武SSK · 受限空间作业安全管控套装</h3>
+            <h3 class="product-name">玄武SSK · 有限空间作业安全管控套装</h3>
             <p class="product-desc">集成多合一气体检测仪、智能安全帽、无线自组网基站、声光报警装置等模块，实现有限空间作业场景的环境感知、人员防护、实时监控与风险闭环管理。</p>
             <div class="product-specs">
               <div class="product-spec"><span class="key">核心模块：</span>气体检测仪 · 智能安全帽 · 自组网基站 · 声光报警</div>
@@ -898,7 +905,7 @@
 
         <div class="product-card" data-aos="fade-up">
           <div class="product-img">
-            <img src="./assets/hardware_eic.jpg" alt="玄武EIC工业级PLC控制器">
+            <img src="./assets/hardware_scu.jpg" alt="玄武EIC工业级PLC控制器">
             <span class="type-badge hw">硬件装备</span>
           </div>
           <div class="product-body">
@@ -913,7 +920,7 @@
 
         <div class="product-card" data-aos="fade-up">
           <div class="product-img">
-            <img src="./assets/hardware_scu.jpg" alt="玄武SCU边缘计算AI盒子">
+            <img src="./assets/hardware_eic.jpg" alt="玄武SCU边缘计算AI盒子">
             <span class="type-badge hw">硬件装备</span>
           </div>
           <div class="product-body">
@@ -1212,8 +1219,8 @@
             <span class="type-badge">智能楼宇</span>
           </div>
           <div class="product-body">
-            <h3 class="product-name">智能楼宇系统管理平台</h3>
-            <p class="product-desc">以"三维BIM+数字孪生+人工智能AI"三大技术为核心，通过技术与建筑深度融合，帮助建筑使用者打造绿色低碳环保的节能型智慧楼宇标杆系统。</p>
+            <h3 class="product-name">智慧楼宇</h3>
+            <p class="product-desc">以"三维BIM+数字孪生+人工智能AI"三大技术为核心，通过技术与建筑深度融合，帮助建筑使用者打造绿色低碳环保的节能型智慧楼宇标杆。</p>
             <div class="product-specs">
               <div class="product-spec"><span class="key">核心能力：</span>能耗监测 · 异常诊断 · 优化控制</div>
               <div class="product-spec"><span class="key">技术应用：</span>空调/照明/排水系统改造</div>
@@ -1247,6 +1254,51 @@
             <div class="product-specs">
               <div class="product-spec"><span class="key">核心能力：</span>上行/时延/覆盖/灵活部署</div>
               <div class="product-spec"><span class="key">技术应用：</span>NFV网络功能虚拟化</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos="fade-up">
+          <div class="product-img">
+            <img src="./assets/solution_green_power.jpg" alt="绿电直连">
+            <span class="type-badge">绿电直连</span>
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">绿电直连</h3>
+            <p class="product-desc">以风电、光伏等绿色电源与用电用户专线直连的新型供电模式，实现绿电物理可追溯与就近消纳，降低用能成本，助力企业绿色低碳转型。</p>
+            <div class="product-specs">
+              <div class="product-spec"><span class="key">核心能力：</span>专线直供 · 绿电溯源 · 源网荷储协同</div>
+              <div class="product-spec"><span class="key">技术应用：</span>新能源直连 · 绿电就近消纳</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos="fade-up">
+          <div class="product-img">
+            <img src="./assets/solution_zero_carbon_park.jpg?v=2" alt="零碳园区">
+            <span class="type-badge">零碳园区</span>
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">零碳园区</h3>
+            <p class="product-desc">以"源网荷储一体化"为核心，统筹园区绿电供给、能效管理与碳排放监测，打造风光储充多能互补、能碳双控的零碳园区标杆。</p>
+            <div class="product-specs">
+              <div class="product-spec"><span class="key">核心能力：</span>能碳管理 · 多能互补 · 零碳规划</div>
+              <div class="product-spec"><span class="key">技术应用：</span>风光储充一体化 · 碳足迹监测</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos="fade-up">
+          <div class="product-img">
+            <img src="./assets/solution_new_energy_om.jpg?v=2" alt="新能源运诊检维一体化">
+            <span class="type-badge">智慧运维</span>
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">新能源"运诊检维"一体化</h3>
+            <p class="product-desc">基于大模型与多源数据融合的新能源"运诊检维"一体化关键技术，覆盖风电、光伏、储能领域，实现设备智能诊断、故障预警与运维决策闭环。</p>
+            <div class="product-specs">
+              <div class="product-spec"><span class="key">核心能力：</span>智能诊断 · 故障预警 · 运维决策</div>
+              <div class="product-spec"><span class="key">技术应用：</span>大模型 · 多源数据融合 · 风光储全场景</div>
             </div>
           </div>
         </div>

@@ -32,3 +32,19 @@ Thumbs.db
 # Environment variables
 .env
 .env.local
+
+# Local image processing scripts & intermediate artifacts
+process_images*.py
+copy_and_fix_gen.py
+fix_p3_p8.py
+fix_p8_final.py
+gen_images/
+*.py.bak
+
+# Backup original images (local rollback only, not in repo)
+zn-promo/assets/solution_*_backup.jpg
+
+# Screenshots / temp assets generated locally
+zn-promo/assets/jimeng-*.png
+zn-promo/assets/test_curl*.jpg
+zn-promo/assets/test_curl*.jpeg
